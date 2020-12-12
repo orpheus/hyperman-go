@@ -18,6 +18,13 @@ makeCrypto () {
 
   checkCryptogen $BINARY
 
+  echo "##############################################"
+  echo "#                                            #"
+  echo "#        GENERATING CRYPTO IDENTITIES        #"
+  echo "#                                            #"
+  echo "##############################################"
+  echo
+
   if [ -z $IDENTIY ]; then
     IDENTITY="cryptogen"
   fi
