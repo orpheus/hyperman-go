@@ -2,17 +2,21 @@
 
 ### Hyperledger Command Center
 
-**Node [Command Center]**
+Hyperman is a hyperledger command center that allows you to dynamically
+spawn, create, destroy, and alter hyperledger nodes. It maintains a
+memorybank of configurations and allows you to create, read, edit, and
+delete, store, and version any configuration required to spawn a production ready network.
 
-1. Spawn
-2. Create
-3. Destroy
-4. Alter
+## Prerequisites
 
-**Resource [Memory Bank]**
+Hyperman needs access to the fabric and fabric-ca code directly so it
+can dynamically build the cmd binaries.
 
-1. CRUD
-2. Version
+For running locally, pull down `fabric` and `fabric-ca` and place the
+following scrips in the respective paths.
 
 
+1. add `buildCmd.sh` and `buildNodes.sh` to `fabric/scripts/`
+
+2. add `fabric/scripts` and `/fabric/bin` to $PATH 
 
