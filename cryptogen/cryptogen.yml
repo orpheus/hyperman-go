@@ -2,7 +2,7 @@
 # Change only if you generated a custom  binary name during build ouptut
 cryptogenBinaryName: "cryptogen"
 # Path to hyperman cryptogen command script
-scriptPath: "../cmdscripts/cryptogen.sh"
+scriptPath: "../cmdscripts/makeCryptogen.sh"
 # Config and Output paths to organization crypto config and materal
 configs:
   org-orderer:

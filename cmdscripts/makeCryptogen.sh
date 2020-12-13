@@ -3,7 +3,7 @@
 echo 
 echo "##############################################"
 echo "#                                            #"
-echo "#        GENERATING CRYPTO IDENTITIES        #"
+echo "#        GENERATING CRYPTO IDENTITY          #"
 echo "#                                            #"
 echo "##############################################"
 echo
@@ -91,7 +91,6 @@ while (( "$#" )); do
     fi
     ;;
     -i|--identity)
-      echo "FOUND identity $2"
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
       IDENTITY=$2
       shift 2
