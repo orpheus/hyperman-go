@@ -49,6 +49,6 @@ func main() {
 			"-i", org,
 		)
 		out, err := command.Output()
-		log.Fatalf("Executed command [%s] %s\nErrorCode = %s\nOutput = %s\n", command.Dir, command.Args, err, out)
+		log.Printf("Executed command [%s] %s\nErrorCode = %s\nOutput = %s\n", command.Dir, command.Args, err, out)
 	}
 }
