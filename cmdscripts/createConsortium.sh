@@ -49,7 +49,7 @@ function createConsortium() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   set -x
-  $BINARY -profile $PROFILE -channelID $CHANNEL_ID -outputBlock $OUTPUT
+  $BINARY -profile $PROFILE -channelID $CHANNEL_ID -outputBlock $OUTPUT -configPath $CONFIG_PATH
   res=$?
   { set +x; } 2>/dev/null
   if [ $res -ne 0 ]; then
@@ -59,9 +59,10 @@ function createConsortium() {
 
 PARAMS=""
 BINARY="configtxgen"
-PROFILE="Gensis"
+PROFILE="TwoOrgsOrdererGenesis"
 CHANNEL_ID="system-channel"
-OUTPUT="./system-genesis-block/genesis.block"
+OUTPUT="../configtxgen/system-genesis-block/genesis.block"
+CONFIG_PATH="/Users/roark/code/github/orpheus/go/hyperman-go/configtxgen/"
 
 while (( "$#" )); do
   case "$1" in
@@ -74,7 +75,16 @@ while (( "$#" )); do
       exit 1
     fi
     ;;
-    -c|--channel-id)
+    -c|--config)
+    if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+      CONFIG_PATH=$2
+      shift 2
+    else
+      echo "Error: Argument for $1 is missing" >&2
+      exit 1
+    fi
+    ;;
+    -ch|--channel-id)
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
       CHANNEL_ID=$2
       shift 2
@@ -103,8 +113,8 @@ done
 eval set -- $PARAMS
 
 # remove the following check to let defaults be created
-# if [ -z $CONFIG ]; then
-#   fatalln "No config specified. Exiting..."
-# fi
+if [ -z $CONFIG_PATH ]; then
+ fatalln "No config specified. Exiting..."
+fi
 
 createConsortium

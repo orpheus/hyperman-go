@@ -57,5 +57,19 @@ specify this path via `configPath` flag or it'll look at the
 3. add `export FABRIC_CFG_PATH="../path/to/cfg"` to your bash profile
 4. run `export FABRIC_CFG_PATH="../path/to/cfg"` in current shell
 
+**!:** the `configtx.yaml` file has to have a Profile that matches the
+`-profile` you passed in to the `createConsortium.sh` script
+
+**!:** then inside the `configtx.yaml` you need to point the
+organization's msp directories to the correct cryptogen path which for
+hyperman is currently under `/cryptogen/organization/{my_orgs}`
+
+**!:** make sure that the orgs and orderers found in the `configtx`
+match the number of `orgs` in peers and orderers found under
+`/cryptogen/organizations/{my_orgs}/**
+
+> CURRENTLY THE SYSTEM GENESIS BLOCK IS GENERATED RELATIVE TO WHERE YOU
+CALL THE BASH SCRIPT SO CALL IT IN THE /CMDSCRIPTS/ DIR SO IT GETS
+OUTPUT IN THE CORRECT PLACE
 
 

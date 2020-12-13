@@ -16,6 +16,6 @@ configs:
     output: "organizations/testOrgs"
   org-3:
     path: "../organizations/cryptogen/crypto-config-org2.yaml"
-    output: "organizations/moreTestOrgs"
+    output: "organizations/testOrgs"
 
 
