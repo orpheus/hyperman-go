@@ -12,6 +12,18 @@ delete, store, and version any configuration required to spawn a production read
   isolated to each netdir
 - dynamically create base configurations needed to start up a network
 
+## Command Scripts Path Problem
+- currently my paths are all over the place just to get things to
+  work...
+- `createCortium.sh` sets the working directory so I can run it
+  anywhere, and `organizations/cpp-generate.sh` does the same thing so
+  that it's path's can correctly reference the cpp-templates 
+- I need to make it so I can run these commands anywhere without having
+  to hack the `pwd` 
+- in `cmd/cryptogen/main.go` I use an absolute path on my own directory
+  structure to get it to correctly reference my config files and their
+  relative paths... this needs to change as well
+
 ## Prerequisites
 
 Hyperman needs access to the fabric and fabric-ca code directly so it
@@ -24,6 +36,8 @@ following scrips in the respective paths.
 1. add `buildCmd.sh` and `buildNodes.sh` to `fabric/scripts/`
 
 2. add `fabric/scripts` and `/fabric/bin` to `$PATH`
+
+3. run `buildCmd.sh -t=ALL`
 
 **!: ** currently for these build scripts to work, you need to call them
 in the `fabric` root dir... toDo: add env vars

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source scriptUtils.sh
-
 echo
 echo "##############################################"
 echo "#                                            #"
@@ -9,6 +7,17 @@ echo "#             Creating Consortium            #"
 echo "#                                            #"
 echo "##############################################"
 echo
+
+# set working directory
+echo
+echo "Running script from: ${PWD}"
+parent_dir="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )"
+echo "Centering directory..."
+cd $parent_dir
+echo "Now running in: ${PWD}"
+echo 
+
+source scriptUtils.sh
 
 # Once you create the organization crypto material, you need to create the
 # genesis block of the orderer system channel. This block is required to bring
@@ -55,6 +64,9 @@ function createConsortium() {
   if [ $res -ne 0 ]; then
     fatalln "Failed to generate orderer genesis block..."
   fi
+  
+  infoln "Generate CCP files for Org1 and Org2"
+  ./ccp-generate.sh
 }
 
 PARAMS=""
