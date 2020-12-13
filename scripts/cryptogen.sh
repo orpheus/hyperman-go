@@ -1,9 +1,19 @@
 #!/bin/bash
 
+echo 
+echo "##############################################"
+echo "#                                            #"
+echo "#        GENERATING CRYPTO IDENTITIES        #"
+echo "#                                            #"
+echo "##############################################"
+echo
+
+pwd
+
 source scriptUtils.sh
 
 checkCryptogen () {
-  echo "Checking for cryptogen binary"
+  infoln "Checking for cryptogen binary..."
   which $1
   if [ "$?" -ne 0 ]; then
     fatalln "Cryptogen tool not found: $1... exiting..."
@@ -12,20 +22,12 @@ checkCryptogen () {
 
 makeCrypto () {
   if [ -z $BINARY ]; then
-    echo "Overwriting binary: $BINARY"
     BINARY="cryptogen"
   fi
 
   checkCryptogen $BINARY
 
-  echo "##############################################"
-  echo "#                                            #"
-  echo "#        GENERATING CRYPTO IDENTITIES        #"
-  echo "#                                            #"
-  echo "##############################################"
-  echo
-
-  if [ -z $IDENTIY ]; then
+  if [ -z $IDENTITY ]; then
     IDENTITY="cryptogen"
   fi
 
@@ -47,7 +49,6 @@ makeCrypto () {
   infoln "Creating crypto for $IDENTITY"
   set -x
   $cmd
-  # $BINARY generate --config=$CONFIG --output=$OUTPUT
   res=$?
   { set +x; } 2>/dev/null
   if [ $res -ne 0 ]; then
@@ -90,6 +91,7 @@ while (( "$#" )); do
     fi
     ;;
     -i|--identity)
+      echo "FOUND identity $2"
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
       IDENTITY=$2
       shift 2
@@ -107,6 +109,11 @@ done
 
 # set positional arguments in their proper place
 eval set -- $PARAMS
+
+# remove the following check to let defaults be created
+if [ -z $CONFIG ]; then
+  fatalln "No config specified. Exiting..."
+fi
 
 makeCrypto
 
