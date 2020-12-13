@@ -9,7 +9,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cryptogenPath = "../../cryptogen"
+// toDo: subsist to this out somehow for a base path then combine that
+// with the relative path. "join the relative path with the desired base
+// path and turn it into an absolute path before passing it to exec.
+// also make it so that the base path can be overideable by env, etc
+var cryptogenPath = "/Users/roark/code/github/orpheus/go/hyperman-go/cryptogen"
 
 func getAbsPath(path string) string {
 	abs, err := filepath.Abs(filepath.Join(cryptogenPath, path))
