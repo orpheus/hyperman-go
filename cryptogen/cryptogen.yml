@@ -7,12 +7,15 @@ scriptPath: "../cmdscripts/makeCryptogen.sh"
 configs:
   org-orderer:
     path: "../organizations/cryptogen/crypto-config-orderer.yaml"
-    output: "testOrgs"
+    output: "organizations/testOrgs"
   org-1:
     path: "../organizations/cryptogen/crypto-config-org1.yaml"
-    output: "testOrgs"
+    output: "organizations/testOrgs"
   org-2:
     path: "../organizations/cryptogen/crypto-config-org2.yaml"
-    output: "testOrgs"
+    output: "organizations/testOrgs"
+  org-3:
+    path: "../organizations/cryptogen/crypto-config-org2.yaml"
+    output: "organizations/moreTestOrgs"
 
 

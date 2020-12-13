@@ -18,4 +18,5 @@
 # vendor/
 trash
 crypto-config
-testOrgs
+cryptogen/organizations/*
+
