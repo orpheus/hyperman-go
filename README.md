@@ -25,6 +25,9 @@ following scrips in the respective paths.
 
 2. add `fabric/scripts` and `/fabric/bin` to `$PATH`
 
+**!: ** currently for these build scripts to work, you need to call them
+in the `fabric` root dir... toDo: add env vars
+
 ## Guide
 
 ### Make Crypto material for organizations
