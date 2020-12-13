@@ -18,5 +18,18 @@ following scrips in the respective paths.
 
 1. add `buildCmd.sh` and `buildNodes.sh` to `fabric/scripts/`
 
-2. add `fabric/scripts` and `/fabric/bin` to $PATH 
+2. add `fabric/scripts` and `/fabric/bin` to `$PATH`
+
+## Guide
+
+### Make Crypto material for organizations
+
+1. under `/cryptogen/`, configure the `cryptogen.yaml` to point to
+   configuration paths for organization nodes (peers and orderers). By
+   default they point to the config files found under `/organizations`.
+   Generate the crypto material by running `go run
+   cmd/cryptogen/main.go` or just build the binary and call it.
+
+
+
 
