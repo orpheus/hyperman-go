@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
-	fmt.Println("I am Hyperman")
+	fmt.Println("Welcome to hyperspace")
 }

@@ -1,0 +1,3 @@
+# COMMAND CENTER
+
+run all scripts from within the directory...

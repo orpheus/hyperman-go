@@ -1,0 +1,21 @@
+# Cryptogen fabric binary name. 
+# Change only if you generated a custom  binary name during build ouptut
+cryptogenBinaryName: "cryptogen"
+# Path to hyperman cryptogen command script
+scriptPath: "../cmdscripts/make-cryptogen.sh"
+# Config and Output paths to organization crypto config and materal
+configs:
+  org-orderer:
+    path: "../organizations/cryptogen/crypto-config-orderer.yaml"
+    output: "organizations/testOrgs"
+  org-1:
+    path: "../organizations/cryptogen/crypto-config-org1.yaml"
+    output: "organizations/testOrgs"
+  org-2:
+    path: "../organizations/cryptogen/crypto-config-org2.yaml"
+    output: "organizations/testOrgs"
+  org-3:
+    path: "../organizations/cryptogen/crypto-config-org2.yaml"
+    output: "organizations/testOrgs"
+
+
