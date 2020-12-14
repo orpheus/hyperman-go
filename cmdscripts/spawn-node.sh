@@ -27,7 +27,7 @@ while (( "$#" )); do
         value="${2#*=}" # get suffix
         if [ -n "${key}" ]; then
             if [ -n "${value}" ]; then
-                echo "export ${2}"
+                echo "export ${2}" >&2
                 export "${2}"
             else
                 echo "ERROR: missing env value for $key"
@@ -61,18 +61,25 @@ while (( "$#" )); do
 esac
 done
 
+
+if [ -z $BINARY ]; then
+    echo "error: no binary specified"
+    echo "exiting..."
+    exit 1
+fi
+ 
 set -x
 $BINARY $START_CMD
 res=$?
 { set +x; } 2>/dev/null
 if [ $res -ne 0 ]; then
-    echo "error: failed to start binary"
-    echo "exiting..."
-    exit 1
+ echo "error: failed to start binary"
+ echo "exiting..."
+ exit 1
 fi
 
 echo "${BINARY} started..."
-
+ 
 
 
 

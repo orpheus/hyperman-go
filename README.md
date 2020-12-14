@@ -80,10 +80,42 @@ hyperman is currently under `/cryptogen/organization/{my_orgs}`
 
 **!:** make sure that the orgs and orderers found in the `configtx`
 match the number of `orgs` in peers and orderers found under
-`/cryptogen/organizations/{my_orgs}/**
+`/cryptogen/organizations/{my_orgs}/**`
 
 > CURRENTLY THE SYSTEM GENESIS BLOCK IS GENERATED RELATIVE TO WHERE YOU
 CALL THE BASH SCRIPT SO CALL IT IN THE /CMDSCRIPTS/ DIR SO IT GETS
 OUTPUT IN THE CORRECT PLACE
+
+### SPAWNING AN ORDERER NODE
+  - very important to note that the `orderer` does not let you set a
+    config path with a flag. it looks for `orderer.yaml` in the default
+    config paths which are `.` and `/env/hyperledger/fabric/` or via the
+    env car `FABRIC_CFG_PATH`
+  - also note: I copied the `configtx.yaml` to create the genesis block
+    from `fabric-samples/test-network/configtx/configtx.yaml` and NOT
+    from `fabric/sampleConfigs/configtx.yaml` OR `/fabric-samples/config/configtx.yaml`
+    - `cp fabric-samples/test-network/configtx/configtx.yaml
+      hyperman-go/configtxgen/configtx.yaml`
+  - NOTE: that `fabric/sampleConfigs` mirrors `fabric-samples/config`
+    - verify that they're the same
+  
+  - so to spawn an `orderer` node I need to make sure the `orderer.yaml`
+    is in the directory I called the binary from or add it to `FABRIC_CFG_PATH`
+    - toDo: update orderer to accept custom config path
+  - what I just did to get it to work was to copy `fabric-samples/config` right into `hyperman-go`
+    - then I moved just the `orderer.yaml` into the cmdscripts so the
+      config could find it
+
+  - it ran but then crashed because it was trying to access a directory
+    that didn't exist
+    - in the `orderer.yaml` I changed the `/var/**` dirs to `../orderer`
+      (a local dir I temporarily created)
+      - This WORKED
+
+  - in `cmdscripts/` run `./spawn-orderer.sh`
+
+
+
+    
 
 
