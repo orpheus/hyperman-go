@@ -1,5 +1,5 @@
 #!/bin/bash
 
-rm -R /Users/Roark/code/github/orpheus/go/hyperman-go/cryptogen/organizations/**
+rm -R ../cryptogen/organizations/**
 
 echo "Cleaned crypogen artifacts" 

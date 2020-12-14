@@ -74,7 +74,7 @@ BINARY="configtxgen"
 PROFILE="TwoOrgsOrdererGenesis"
 CHANNEL_ID="system-channel"
 OUTPUT="../configtxgen/system-genesis-block/genesis.block"
-CONFIG_PATH="/Users/roark/code/github/orpheus/go/hyperman-go/configtxgen/"
+CONFIG_PATH="/Users/roark/code/github/orpheus/go/hyperspace/configtxgen/"
 
 while (( "$#" )); do
   case "$1" in

@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	fmt.Println("I am Hyperman")
+	fmt.Println("Welcome to hyperspace")
 }

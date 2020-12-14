@@ -1,8 +1,10 @@
-# Hyperman
+# Hyperspace
+
+## Go far, go fast, explore deep.
 
 ### Hyperledger Command Center
 
-Hyperman is a hyperledger command center that allows you to dynamically
+Hyperspace is a hyperledger command center that allows you to dynamically
 spawn, create, destroy, and alter hyperledger nodes. It maintains a
 memorybank of configurations and allows you to create, read, edit, and
 delete, store, and version any configuration required to spawn a production ready network.
@@ -26,7 +28,7 @@ delete, store, and version any configuration required to spawn a production read
 
 ## Prerequisites
 
-Hyperman needs access to the fabric and fabric-ca code directly so it
+Hyperspace needs access to the fabric and fabric-ca code directly so it
 can dynamically build the cmd binaries.
 
 For running locally, pull down `fabric` and `fabric-ca` and place the
@@ -76,7 +78,7 @@ specify this path via `configPath` flag or it'll look at the
 
 **!:** then inside the `configtx.yaml` you need to point the
 organization's msp directories to the correct cryptogen path which for
-hyperman is currently under `/cryptogen/organization/{my_orgs}`
+hyperspace is currently under `/cryptogen/organization/{my_orgs}`
 
 **!:** make sure that the orgs and orderers found in the `configtx`
 match the number of `orgs` in peers and orderers found under
@@ -95,14 +97,14 @@ OUTPUT IN THE CORRECT PLACE
     from `fabric-samples/test-network/configtx/configtx.yaml` and NOT
     from `fabric/sampleConfigs/configtx.yaml` OR `/fabric-samples/config/configtx.yaml`
     - `cp fabric-samples/test-network/configtx/configtx.yaml
-      hyperman-go/configtxgen/configtx.yaml`
+      hyperspace/configtxgen/configtx.yaml`
   - NOTE: that `fabric/sampleConfigs` mirrors `fabric-samples/config`
     - verify that they're the same
   
   - so to spawn an `orderer` node I need to make sure the `orderer.yaml`
     is in the directory I called the binary from or add it to `FABRIC_CFG_PATH`
     - toDo: update orderer to accept custom config path
-  - what I just did to get it to work was to copy `fabric-samples/config` right into `hyperman-go`
+  - what I just did to get it to work was to copy `fabric-samples/config` right into `hyperspace`
     - then I moved just the `orderer.yaml` into the cmdscripts so the
       config could find it
 

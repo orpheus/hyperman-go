@@ -13,7 +13,7 @@ import (
 // with the relative path. "join the relative path with the desired base
 // path and turn it into an absolute path before passing it to exec.
 // also make it so that the base path can be overideable by env, etc
-var cryptogenPath = "/Users/roark/code/github/orpheus/go/hyperman-go/cryptogen"
+var cryptogenPath = "/Users/roark/code/github/orpheus/go/hyperspace/cryptogen"
 
 func getAbsPath(path string) string {
 	abs, err := filepath.Abs(filepath.Join(cryptogenPath, path))

@@ -1,4 +1,4 @@
-module github.com/orpheus/hyperman-go
+module github.com/orpheus/hyperspace
 
 go 1.15
 
