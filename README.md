@@ -1,6 +1,6 @@
 # Hyperspace
 
-## Go far, go fast, explore deep.
+## Go far, move fast.
 
 ### Hyperledger Command Center
 
