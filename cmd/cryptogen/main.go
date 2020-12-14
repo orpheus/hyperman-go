@@ -27,8 +27,9 @@ func main() {
 	viper.SetConfigName("cryptogen")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("../../cryptogen")
-	viper.AddConfigPath(".")
+	viper.AddConfigPath("../cryptogen")
 	viper.AddConfigPath("cryptogen")
+	viper.AddConfigPath(".")
 
 	err := viper.ReadInConfig()
 	if err != nil {

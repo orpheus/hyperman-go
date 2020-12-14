@@ -15,7 +15,7 @@ else
 fi
 
 # Clean binaries
-if [ -d "../bin/*" ]; then
+if [ -a "../bin/gcryptogen" ]; then
     rm ../bin/*
     res=$?
     if [ $res -ne 0 ]; then

@@ -116,8 +116,11 @@ OUTPUT IN THE CORRECT PLACE
 
   - in `cmdscripts/` run `./spawn-orderer.sh`
 
+### Spawning an orderer node from scratch via a static config
+  - from now on, just make sure to call all cmdscripts from the
+    cmdscript directory, think of it as your cmd-center
 
-
-    
-
-
+  - running `network.sh` will clean all the artifacts, generate the
+    crypto, create a consortium, and spawn a node
+    - eventually I'll have to check for existing material and only
+      manually clean before spawn`
