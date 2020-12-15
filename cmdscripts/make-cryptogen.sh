@@ -32,15 +32,18 @@ echo
 # certificates, and MSP folders that are needed to create the test network in the
 # "organizations/ordererOrganizations" directory.
 
-pwd
-
+source network-gate.sh
 source scriptUtils.sh
 
 checkCryptogen () {
   infoln "Checking for cryptogen binary..."
   which $1
   if [ "$?" -ne 0 ]; then
-    fatalln "Cryptogen tool not found: $1... exiting..."
+    if [ -e "../bin/$1" ]; then
+      echo "Found $1"
+    else
+      fatalln "Cryptogen tool not found: $1... exiting..."
+    fi
   fi
 }
 
@@ -133,7 +136,7 @@ done
 # set positional arguments in their proper place
 eval set -- $PARAMS
 
-# remove the following check to let defaults be created
+# comment out the following check to let defaults be created
 if [ -z $CONFIG ]; then
   fatalln "No config specified. Exiting..."
 fi

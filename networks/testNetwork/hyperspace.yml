@@ -1,0 +1,24 @@
+# Hyperspace Network Configuration
+
+# Path to Hyperspace cmdscript. Should this path be
+# relative to the cmdscripts directory?
+# that way I can just list the file-name here...
+scriptPath: "../../cmdscripts/spawn-node.sh"
+
+# define which nodes you want as part of your network here
+# nodes.peer and nodes.orderer are needed paths
+# the values underneath the keys are the names of
+# the nodes which should match the directory names
+# found under nodes/peers and nodes/orderers
+# (fyi: "peer" and "orderer" are singular here
+# because that's the binary name. They are plural
+# in the directory tree (node/[peers/orderers]) because
+# there are multiple instances of that single binary...
+# and because I just happened to name it that way.
+# maybe just standardize to singular... nah
+nodes:
+  peer:
+    - peer-01
+    - peer-01
+  orderer:
+    - orderer-01

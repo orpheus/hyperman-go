@@ -2,4 +2,4 @@ name: Hyperspace
 version: 0.1.0
 creator: Orpheus
 github: github.com/orpheus/hyperspace
-
+defaultNetwork: "testNetwork"

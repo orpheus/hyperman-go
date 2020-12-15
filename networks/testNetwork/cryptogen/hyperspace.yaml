@@ -1,8 +1,14 @@
-# Cryptogen fabric binary name. 
-# Change only if you generated a custom  binary name during build ouptut
-cryptogenBinaryName: "cryptogen"
-# Path to hyperman cryptogen command script
-scriptPath: "../cmdscripts/make-cryptogen.sh"
+# Hyperspace Cryptogen Configuration
+
+# Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
+# Change only if you generated a custom binary name during build ouptut
+fabricBinaryName: "cryptogen"
+
+# Path to Hyperspace cmdscript. Should this path be
+# relative to the cmdscripts directory?
+# that way I can just list the file-name here...
+scriptPath: "../../../cmdscripts/make-cryptogen.sh"
+
 # Config and Output paths to organization crypto config and materal
 configs:
   org-orderer:

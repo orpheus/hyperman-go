@@ -8,15 +8,7 @@ echo "#                                            #"
 echo "##############################################"
 echo
 
-# set working directory
-echo
-echo "Running script from: ${PWD}"
-parent_dir="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )"
-echo "Centering directory..."
-cd $parent_dir
-echo "Now running in: ${PWD}"
-echo 
-
+source network-gate.sh
 source scriptUtils.sh
 
 # Once you create the organization crypto material, you need to create the
@@ -66,17 +58,26 @@ function createConsortium() {
   fi
   
   infoln "Generate CCP files for Org1 and Org2"
-  ./ccp-generate.sh
+  # pass the path along to the shell file so it can reference it's
+  # needed files relatively
+  "../networks/${NETWORK}/organizations/ccp-generate.sh" "../networks/${NETWORK}/organizations/"
+  res=$?
+  { set +x; } 2>/dev/null
+  if [ $res -ne 0 ]; then
+    fatalln "Failed to generate CCP files for Org1 and Org2..."
+  fi
 }
 
 PARAMS=""
 BINARY="configtxgen"
 PROFILE="TwoOrgsOrdererGenesis"
 CHANNEL_ID="system-channel"
-OUTPUT="../configtxgen/system-genesis-block/genesis.block"
-CONFIG_PATH="/Users/roark/code/github/orpheus/go/hyperspace/configtxgen/"
+OUTPUT="../networks/${NETWORK}/configtxgen/system-genesis-block/genesis.block"
+# contains the configtx.yaml that is needed for the configtxgen binary
+CONFIG_PATH="../networks/${NETWORK}/configtxgen/"
 
 while (( "$#" )); do
+  echo "$1"
   case "$1" in
     -p|--profile)
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
@@ -114,19 +115,17 @@ while (( "$#" )); do
       exit 1
     fi
     ;;
-    *) # preserve positional arguments
+    *)
     PARAMS="$PARAMS $1"
     shift
     ;;
 esac
 done
 
-# set positional arguments in their proper place
-eval set -- $PARAMS
+# comment out the following check to let the defaults be created
+#if [ -z $CONFIG_PATH ]; then
+# fatalln "No config specified. Exiting..."
+#fi
 
-# remove the following check to let defaults be created
-if [ -z $CONFIG_PATH ]; then
- fatalln "No config specified. Exiting..."
-fi
-
+echo "Create"
 createConsortium
