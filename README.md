@@ -125,7 +125,7 @@ OUTPUT IN THE CORRECT PLACE
     - eventually I'll have to check for existing material and only
       manually clean before spawn
 
-### 12/15/2020 - Refactoring to Main Script Configuration Network Start
+### 12/14/2020 - Refactoring to Main Script Configuration Network Start
 
 - cmdscripts now take a $1 -> $NETWORK argument so they can build the
   necessary artifacts in correct directories
@@ -186,4 +186,35 @@ Things I forgot and needed to remind myself
     - the go code will now what to do by where the `hyperspace.yaml`
       lives
 
+## Next..
+## 12/15/2020 - 
+1. create a hyperspace config for configtxgen and create a main script to run and read from it to create the consortiums and the genesis block~~~
+    - DONE
+2. fix network main script 
+    - orderer binary isn't getting the `orderer.yaml`
+3. spawn peers from main script
+    - update peer env vars
+4. convert configtxgen and cryptogen main scripts into packages that are used
+ by the network main script 
+5. the network main script needs to create the ctg, cryp, and spawn the nodes
+ (everything the start-network script is doing) 
 
+6. extra:
+    - have network paths be more dynamics, hyperspace/networks/proj-network/proj-network-qa
+        - create  different networks for different projects and different networks for different staging environments within that project
+
+### Changes
+- moved spawn-orderer.sh to deprecated folder
+- moved scriptUtils to a utils folder
+- now applying network-gate only to clean-artifacts
+    - which is only automatically called by start-network with a hardcoded
+     network name
+- passing in -n (network) flag to scripts now (make-cryp & create-consort)
+    - doing this now because we're no longer network gating which was very
+     hardcoded anyways. plus, the network is in the main go script so it
+      makes sense to pass that down and have that be more dynamic
+      - had to add -n flag checks to while loops
+- removed defaults for create-consort.sh (defined in script)
+
+### 0.1.0 --> DONE
+ 

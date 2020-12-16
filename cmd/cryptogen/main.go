@@ -36,7 +36,7 @@ func main() {
 
 		command := exec.Command("/bin/bash",
 			scriptPath,
-			network,
+			"-n", network,
 			"-b", cryptogenViper.GetString("fabricBinaryName"),
 			"-c", configPath,
 			"-o", outputPath,

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo 
+echo
 echo "##############################################"
 echo "#                                            #"
 echo "#        GENERATING CRYPTO IDENTITY          #"
@@ -32,8 +32,7 @@ echo
 # certificates, and MSP folders that are needed to create the test network in the
 # "organizations/ordererOrganizations" directory.
 
-source network-gate.sh
-source scriptUtils.sh
+source util/scriptUtils.sh
 
 checkCryptogen () {
   infoln "Checking for cryptogen binary..."
@@ -72,7 +71,7 @@ makeCrypto () {
   if [ -n "$OUTPUT" ]; then
     cmd="$cmd --output=$OUTPUT"
   fi
-  
+
   infoln "Creating crypto for $IDENTITY"
   set -x
   $cmd
@@ -90,6 +89,15 @@ PARAMS=""
 
 while (( "$#" )); do
   case "$1" in
+    -n|--network)
+    if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+      NETWORK=$2
+      shift 2
+    else
+      echo "Error: Argument for $1 is missing" >&2
+      exit 1
+    fi
+    ;;
     -c|--config)
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
       CONFIG=$2
@@ -134,11 +142,15 @@ esac
 done
 
 # set positional arguments in their proper place
-eval set -- $PARAMS
+eval set -- "${PARAMS}"
 
 # comment out the following check to let defaults be created
-if [ -z $CONFIG ]; then
+if [ -z "${CONFIG}" ]; then
   fatalln "No config specified. Exiting..."
+fi
+
+if [ -z "${NETWORK}" ]; then
+  fataln "Network no specified. Exiting..."
 fi
 
 makeCrypto

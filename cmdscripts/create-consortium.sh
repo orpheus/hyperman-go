@@ -8,8 +8,7 @@ echo "#                                            #"
 echo "##############################################"
 echo
 
-source network-gate.sh
-source scriptUtils.sh
+source util/scriptUtils.sh
 
 # Once you create the organization crypto material, you need to create the
 # genesis block of the orderer system channel. This block is required to bring
@@ -50,13 +49,13 @@ function createConsortium() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   set -x
-  $BINARY -profile $PROFILE -channelID $CHANNEL_ID -outputBlock $OUTPUT -configPath $CONFIG_PATH
+  $BINARY -profile $PROFILE -channelID $CHANNEL_ID -outputBlock $OUTPUT -configPath $CONFIG
   res=$?
   { set +x; } 2>/dev/null
   if [ $res -ne 0 ]; then
     fatalln "Failed to generate orderer genesis block..."
   fi
-  
+
   infoln "Generate CCP files for Org1 and Org2"
   # pass the path along to the shell file so it can reference it's
   # needed files relatively
@@ -69,17 +68,27 @@ function createConsortium() {
 }
 
 PARAMS=""
-BINARY="configtxgen"
-PROFILE="TwoOrgsOrdererGenesis"
-CHANNEL_ID="system-channel"
-OUTPUT="../networks/${NETWORK}/configtxgen/system-genesis-block/genesis.block"
-# contains the configtx.yaml that is needed for the configtxgen binary
-CONFIG_PATH="../networks/${NETWORK}/configtxgen/"
 
-while (( "$#" )); do
-  echo "$1"
+# COMMENT OUT DEFAULTS FOR NOW
+#BINARY="configtxgen"
+#PROFILE="TwoOrgsOrdererGenesis"
+#CHANNEL_ID="system-channel"
+#OUTPUT="../networks/${NETWORK}/configtxgen/system-genesis-block/genesis.block"
+## contains the configtx.yaml that is needed for the configtxgen binary
+#CONFIG_PATH="../networks/${NETWORK}/configtxgen/"
+
+while (("$#")); do
   case "$1" in
-    -p|--profile)
+  -n | --network)
+    if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+      NETWORK=$2
+      shift 2
+    else
+      echo "Error: Argument for $1 is missing" >&2
+      exit 1
+    fi
+    ;;
+  -p | --profile)
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
       PROFILE=$2
       shift 2
@@ -88,16 +97,16 @@ while (( "$#" )); do
       exit 1
     fi
     ;;
-    -c|--config)
+  -c | --config)
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
-      CONFIG_PATH=$2
+      CONFIG=$2
       shift 2
     else
       echo "Error: Argument for $1 is missing" >&2
       exit 1
     fi
     ;;
-    -ch|--channel-id)
+  -ch | --channel-id)
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
       CHANNEL_ID=$2
       shift 2
@@ -106,7 +115,7 @@ while (( "$#" )); do
       exit 1
     fi
     ;;
-    -o|--output)
+  -o | --output)
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
       OUTPUT=$2
       shift 2
@@ -115,17 +124,29 @@ while (( "$#" )); do
       exit 1
     fi
     ;;
-    *)
+    -b | --binary)
+    if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+      BINARY=$2
+      shift 2
+    else
+      echo "Error: Argument for $1 is missing" >&2
+      exit 1
+    fi
+    ;;
+  *)
     PARAMS="$PARAMS $1"
     shift
     ;;
-esac
+  esac
 done
 
-# comment out the following check to let the defaults be created
-#if [ -z $CONFIG_PATH ]; then
-# fatalln "No config specified. Exiting..."
-#fi
+# comment out the following check to let defaults be created
+if [ -z "${CONFIG}" ]; then
+  fatalln "No config specified. Exiting..."
+fi
 
-echo "Create"
+if [ -z "${NETWORK}" ]; then
+  fataln "Network no specified. Exiting..."
+fi
+
 createConsortium
