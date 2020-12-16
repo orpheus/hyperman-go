@@ -5,8 +5,12 @@ import (
 	"github.com/orpheus/hyperspace/util"
 	"github.com/spf13/viper"
 	"log"
+	"os"
 	"os/exec"
+	"strings"
 )
+
+const NETWORK_PATH_REPLACER = "${NETWORK_PATH}"
 
 func main() {
 	rootViper := util.SpawnHyperspaceViper(".")
@@ -19,7 +23,6 @@ func main() {
 
 	// look through network folders for the default network
 	networkViper := util.SpawnHyperspaceViper(networkPath)
-	fmt.Println("config path for default network: ", networkPath)
 
 	// check to make sure nods config is set
 	if !networkViper.IsSet("scriptPath") {
@@ -65,27 +68,56 @@ func main() {
 
 	// spawn orderers
 	ordererNodeConfigs := hyperspaceVipers["orderers"]
-	for _, hyperviper := range ordererNodeConfigs { // go routine to spawn nodes?
+	for _, hyperviper := range ordererNodeConfigs { // go routine to spawn
+		// nodes?
 		// form the cmd line argument for the spawnNode shell script
 		args := make([]string, 0) // better way to do this?
 
 		// grab binary name
 		binary := hyperviper.GetString("binary")
-		args = append(args,"-b")
-		args = append(args, binary)
+		args = append(args,"-b", binary)
 
 		// grab env vars
 		environment := hyperviper.GetStringSlice("environment")
 		for _, env := range environment {
-			args = append(args, "-e")
-			args = append(args, env)
+			// need to replace the environment relative paths
+			// with a path that the command center can recognize
+			env = strings.Replace(env, NETWORK_PATH_REPLACER, networkPath, 1 )
+			args = append(args, "-e", string(env))
 		}
 
-		out, err := exec.Command(
+		// here we set the FABRIC_CFG_PATH to the orderer's directory
+		// for the orderer binary to find the orderer.yaml config
+		//args = append(args, "-e")
+		//pathToOrdererConfig := fmt.Sprintf("%s/nodes/orderers/%s",
+		//	networkPath, name)
+		//args = append(args, fmt.Sprintf("FABRIC_CFG_PATH=%s", pathToOrdererConfig))
+
+		//fmt.Println(fmt.Sprintf("FABRIC_CFG_PATH=%s", pathToOrdererConfig))
+		args = append(args, "-cmd", "start")
+		fmt.Println("COMMAND GO", scriptPath)
+		cmd := exec.Command(
 			scriptPath,
 			args...
-			).Output()
-		log.Printf("ErrorCode = %s\nOutput = %s\n",  err, out)
+			)
+		// NEEDED TO SEE LOGS IN TERMINAL
+		// in the bash script make sure to route
+		// stdErr to stdOut to see errors as well ( 2>&1 )
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		// This runs the command waits for it to finish,
+		// meanwhile the stdout output is routed to stdout
+		// so I can see what's going on in terminal
+		// when I start to spawn multiple of them
+		// maybe switch to the "Start" cmd, run them in
+		// go routines, grab their pids for deactivation later
+
+		// for now this is fine
+		err := cmd.Run()
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("Just ran subprocess %d, hanging...\n", cmd.Process.Pid)
 	}
 
 	// spawn peers

@@ -216,5 +216,27 @@ Things I forgot and needed to remind myself
       - had to add -n flag checks to while loops
 - removed defaults for create-consort.sh (defined in script)
 
+- so tired... 
+- spent hours dealing with what I thought was an error...
+    - turns out you need to set the stdout/err for golang's exec.Command
+        - to see any output in the terminal
+            - I thought the application was just hanging...
+            
+ `ps aux | grep orderer` to see running orderer process,  
+ `kill -9 {PID}` grab PID from the orderer process
+ 
+- I moved `orderer.yaml` to the cmdscript center to get it to work
+    - now that I have the logging figured out, I'll test ways to get that config to work in it's own directory
+
+- for the orderer hyperspace config, I added a placeholder: `${NETWORK_PATH}` to the env variables
+    - which golang will parse and replace with the desired network path. Because I don't know which env vars
+        - are paths at runtime, I have to parse+replace each one. 
+            - this is compared to a config that I know is a path and can just append the network path
+                - dynamic variables like this have to be dynamically parsed and replaced
+                    **CREATE A KEY BANK OF PLACEHOLDER VARIABLES
 ### 0.1.0 --> DONE
+
+## HYPERSPACE PLACEHOLDERS
+- orderer <-- hyperspace config
+    - `${NETWORK_PATH}`: will be replaced by the path to the active network
  

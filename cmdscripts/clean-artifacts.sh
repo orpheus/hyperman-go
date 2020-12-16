@@ -4,7 +4,8 @@
 # HOW DO YOU CLEAN FILES UNDER DIRECTORIES WITH * #
 ###################################################
 
-source network-gate.sh
+#source network-gate.sh
+NETWORK="testNetwork"
 
 # Clean binaries
 if [ -a "../bin/gcryptogen" ]; then

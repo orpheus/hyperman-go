@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/orpheus/hyperspace/util"
 	"log"
+	"os"
 	"os/exec"
 )
 
@@ -34,7 +35,7 @@ func main() {
 		configPath = fmt.Sprintf("%s/%s", cryptogenPath, cryptogenViper.GetString(configPath))
 		outputPath = fmt.Sprintf("%s/%s", cryptogenPath, cryptogenViper.GetString(outputPath))
 
-		command := exec.Command("/bin/bash",
+		cmd := exec.Command("/bin/bash",
 			scriptPath,
 			"-n", network,
 			"-b", cryptogenViper.GetString("fabricBinaryName"),
@@ -42,7 +43,11 @@ func main() {
 			"-o", outputPath,
 			"-i", org,
 		)
-		out, err := command.Output()
-		log.Printf("Executed command [%s] %s\nErrorCode = %s\nOutput = %s\n", command.Dir, command.Args, err, out)
+
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+
+		err := cmd.Run()
+		log.Printf("Cryptogen main script finished with error: %v", err)
 	}
 }

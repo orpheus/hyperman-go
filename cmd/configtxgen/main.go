@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/orpheus/hyperspace/util"
 	"log"
+	"os"
 	"os/exec"
 )
 
@@ -46,6 +47,8 @@ func main() {
 		"-o", output,
 	)
 
-	out, err := command.Output()
-	log.Printf("Executed command [%s] %s\nErrorCode = %s\nOutput = %s\n", command.Dir, command.Args, err, out)
+	command.Stdout = os.Stdout
+
+	err := command.Run()
+	log.Printf("Configtxgen main script finished with error: %v", err)
 }

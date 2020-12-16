@@ -2,9 +2,9 @@
 
 echo
 echo "##############################################"
-echo "#                                            #"
-echo "#        GENERATING CRYPTO IDENTITY          #"
-echo "#                                            #"
+echo "#                                             "
+echo "#        GENERATING CRYPTO IDENTITY           "
+echo "#                                             "
 echo "##############################################"
 echo
 

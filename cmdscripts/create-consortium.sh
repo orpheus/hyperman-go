@@ -2,9 +2,9 @@
 
 echo
 echo "##############################################"
-echo "#                                            #"
-echo "#             Creating Consortium            #"
-echo "#                                            #"
+echo "#                                             "
+echo "#             Creating Consortium             "
+echo "#                                             "
 echo "##############################################"
 echo
 
