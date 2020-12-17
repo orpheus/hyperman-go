@@ -22,6 +22,7 @@ do
     if [ -n "$var" ]; then
       infoln "Command center location: $var"
       COMMAND_CENTER="$var"
+      break
     else
        fatalln "missing --command-center flag; must specify location"
     fi

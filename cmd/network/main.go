@@ -8,10 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 )
-
-const NETWORK_PATH_REPLACER = "${NETWORK_PATH}"
 
 func main() {
 	rootViper := util.SpawnHyperspaceViper(".")
@@ -31,32 +28,34 @@ func main() {
 		log.Panicf("node configurations not set for network: %s", network)
 	}
 
+	/**
+	The following code checks the hyperspace.yaml at the root of a network.
+	From it, it will grab the orderers and peers it will need to spawn by their listed name.
+	It knows to look for `nodes.orderers` and `nodes.`peers` and then creates paths to the nodes
+	using their name like so: `{network}/nodes/orderers/{orderer_name}`. Replace "orderers" with "peers" and vice versa
+	 */
 	// check to make sure nods config is set
 	if !networkViper.IsSet("nodes") {
 		log.Panicf("node configurations not set for network: %s", network)
 	}
-
 	// make sure an orderer is defined
 	if !networkViper.IsSet("nodes.orderers") {
 		log.Panicf("Need to specify at least one orderer node in a hyperspace network configuration: %s", network)
 	}
-
 	// get names of the orderers
 	ordererNodes := networkViper.GetStringSlice("nodes.orderers")
 	peerNodes := networkViper.GetStringSlice("nodes.peers")
-
 	// create a hyperspace vipers map
 	hyperspaceVipers := make(map[string]map[string]*viper.Viper)
-	// create a keys for nodes"
+	// create a key:map for node types
 	hyperspaceVipers["orderers"] = make(map[string]*viper.Viper)
 	hyperspaceVipers["peers"] = make(map[string]*viper.Viper)
-
 	// loop through each orderer config and spawn a hyperspace viper
 	for _, ordererName := range ordererNodes {
+		// toDo: filepath.Join()
 		ordererPath := fmt.Sprintf("%s/nodes/orderers/%s", networkPath, ordererName)
 		hyperspaceVipers["orderers"][ordererName] = util.SpawnHyperspaceViper(ordererPath)
 	}
-
 	// grab peer configs if set
 	if networkViper.IsSet("nodes.peers") {
 		for _, peerName := range peerNodes {
@@ -67,39 +66,44 @@ func main() {
 
 	// combine network path with relative script path
 	scriptPath := networkViper.GetString("scriptPath")
+	// toDo: filepath.Join()
 	scriptPath = fmt.Sprintf("%s/%s", networkPath, scriptPath)
 
-	fmt.Println("OKOKOK")
-	// spawn orderers
+	/**
+	SPAWN ORDERERS:
+	This code loops through the hyperspace configurations gathered above for the orderers,
+	and using the specified env variables, binary name, and startCmd, will call the
+	spawn-node.sh script to spawn an orderer.
+	Note: no "scriptPath" is defined in this configuration. This could be added later
+	to maximize flexibility and allow others to hack it.
+	Note: If a "scriptPath" were allowed here, the path would be relative to where the
+	HYPERSPACE_CONTROLLER (aka GOD) is, meaning that GOD would have to join the relative
+	path with the absolute path of the CONTROL_CENTER (the hyperspace directory root)
+	Note: need to name the HYPERSPACE_CONTROLLER, not GOD. Who or what controls the Hyperspace?
+	...think more on this later
+	 */
 	ordererNodeConfigs := hyperspaceVipers["orderers"]
-	fmt.Println(ordererNodeConfigs)
-	for _, hyperviper := range ordererNodeConfigs { // go routine to spawn
-		// nodes?
+	for _, hyperviper := range ordererNodeConfigs { // go routine?
 		// form the cmd line argument for the spawnNode shell script
 		args := make([]string, 0) // better way to do this?
 
 		// grab binary name
 		binary := hyperviper.GetString("binary")
-		args = append(args,"-b", binary)
+		// set the command_center for the cmdscript to the node's directory
+		commandCenter := filepath.Dir(hyperviper.ConfigFileUsed())
+		args = append(args,
+			"-b", binary,
+			"-cmd", "start",
+			"--command-center", commandCenter,
+			)
 
-		// grab env vars
+		fmt.Println(args)
+		// grab and set env vars
 		environment := hyperviper.GetStringSlice("environment")
 		for _, env := range environment {
-			// need to replace the environment relative paths
-			// with a path that the command center can recognize
-			env = strings.Replace(env, NETWORK_PATH_REPLACER, networkPath, 1 )
-			fmt.Println("export", env)
 			args = append(args, "-e", string(env))
 		}
 
-		//fmt.Println(fmt.Sprintf("FABRIC_CFG_PATH=%s", pathToOrdererConfig))
-		args = append(args, "-cmd", "start")
-
-		// set the command center for the cmdscript to the node's directory
-		commandCenter := filepath.Dir(hyperviper.ConfigFileUsed())
-		args = append(args, "--command-center", commandCenter)
-
-		fmt.Println("Running script:", scriptPath)
 		cmd := exec.Command(
 			scriptPath,
 			args...
@@ -109,14 +113,12 @@ func main() {
 		// stdErr to stdOut to see errors as well ( 2>&1 )
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		// This runs the command waits for it to finish,
-		// meanwhile the stdout output is routed to stdout
+		// the stdout output is routed to stdout
 		// so I can see what's going on in terminal
 		// when I start to spawn multiple of them
 		// maybe switch to the "Start" cmd, run them in
 		// go routines, grab their pids for deactivation later
-
-		// for now this is fine
+		// for now this is fine, when you change it, change peer as well
 		err := cmd.Run()
 		if err != nil {
 			log.Fatal(err)
@@ -124,21 +126,35 @@ func main() {
 		log.Printf("Just ran subprocess %d, hanging...\n", cmd.Process.Pid)
 	}
 
-	// spawn peers
+	/**
+	SPAWN PEERS:
+	This code loops through the hyperspace configurations gathered above for the peers,
+	and using the specified env variables, binary name, and startCmd, will call the
+	spawn-node.sh script to spawn an orderer.
+	Note: no "scriptPath" is defined in this configuration. This could be added later
+	to maximize flexibility and allow others to hack it.
+	Note: If a "scriptPath" were allowed here, the path would be relative to where the
+	HYPERSPACE_CONTROLLER is, meaning that would have to join the relative
+	path with the absolute path of the CONTROL_CENTER (the hyperspace directory root)
+	Note: need to name the HYPERSPACE_CONTROLLER, not GOD. Who or what controls the Hyperspace?
+	...think more on this later
+	*/
 	//peerNodeConfigs := hyperspaceVipers["peers"]
 	//for _, hyperviper := range peerNodeConfigs { // go routine to spawn nodes?
 	//	// form the cmd line argument for the spawnNode shell script
 	//	args := make([]string, 0) // better way to do this?
 	//
-	//	// set binary
+	//	// set binary and startCmd
 	//	binary := hyperviper.GetString("binary")
-	//	args = append(args,"-b")
-	//	args = append(args, binary)
-	//
-	//	// set cmd
 	//	startCmd := hyperviper.GetString("node start")
-	//	args = append(args,"-cmd")
-	//	args = append(args, startCmd)
+	//	// set the command_center for the cmdscript to the node's directory
+	//	commandCenter := filepath.Dir(hyperviper.ConfigFileUsed())
+	//	args = append(
+	//		args,
+	//		"-b", binary,
+	//		"-cmd", startCmd,
+	//		"--command-center", commandCenter,
+	//		)
 	//
 	//	// set env vars
 	//	environment := hyperviper.GetStringSlice("environment")
@@ -147,9 +163,17 @@ func main() {
 	//		args = append(args, env)
 	//	}
 	//
-	//	out, err := exec.Command("./cmdscripts/spawn-node.sh", args...).Output()
-	//	log.Printf("ErrorCode = %s\nOutput = %s\n",  err, out)
+	//	cmd := exec.Command(
+	//		scriptPath,
+	//		args...
+	//	)
+	//	cmd.Stdout = os.Stdout
+	//	cmd.Stderr = os.Stderr
+	//	err := cmd.Run()
+	//	if err != nil {
+	//		log.Fatal(err)
+	//	}
+	//	log.Printf("Just ran subprocess %d, hanging...\n", cmd.Process.Pid)
 	//}
-
 }
 
