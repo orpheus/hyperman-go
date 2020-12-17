@@ -34,3 +34,4 @@ orderer/*
 *.key
 *priv_sk
 *.block
+ledger

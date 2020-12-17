@@ -81,7 +81,7 @@ if [ -z "$BINARY" ]; then
 fi
 
 set -x
-$BINARY "$START_CMD" 2>&1
+$BINARY $START_CMD 2>&1
 res=$?
 { set +x; } 2>/dev/null
 if [ $res -ne 0 ]; then

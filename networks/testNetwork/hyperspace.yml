@@ -18,7 +18,7 @@ scriptPath: "../../cmdscripts/spawn-node.sh"
 nodes:
   peers:
     - peer-01
-    - peer-01
+    - peer-02
   orderers:
     - orderer-01
 
