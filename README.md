@@ -283,12 +283,58 @@ So now I need make sure paths are relative to where their commander called them.
         - I'm not yet sure what the operations ports is
         
 ## 12-16-2020
-### PHASE 0.1.0 SPAWN TEST NETWORK WITH STATIC HYPERSPACE CONFIG COMPLETED
+### PHASE 0.1.0-beta SPAWN TEST NETWORK WITH STATIC HYPERSPACE CONFIG COMPLETED
 ##### toDo: Cleanup
 - refactor cryptogen and configtxgen into modules
 - remove ./start-network.sh script and instead build and run a hyperspace binary
 - kill processes on SIGTERM
 
-### 0.1.0 --> DONE
+### 0.1.0 STATIC_CONFIG_ONE_SCRIPT_3NODES --> DONE
 
+## 0.2.0 CMDLINE INTERFACE
+    - first dynamic implementations
+    - generate network (Brahma)
+    - start network by name (Shiva)
+    - destroy network by name (Vishnu)
+    - add node to network [by_name]
+        - orderer
+        - peer
+    - add organization
+    - create channel
+    - install chaincode
+    - CAs?...get the core functions scripted
  
+DONE WHEN:
+    - can create networks, orgs, and nodes (generate static resources)
+    - can create channels and install chaincode
+    - start and destroy networks by name
+    
+0.2.0_DONE -> PLAY WITH YOUR CREATION
+    - build example networks with it
+    - learn hyperledger inside and out
+
+0.3.0...? Database or Docker? 
+    - which first
+    - Database will need a lot of work
+        - filesystem management  
+            - CRUD + versioning
+        - apis
+0.4.0...? Docker&Deploy or UI?
+    - which first
+    - UI will need a lot of work
+        - I don't even want to think about it
+    - deploying will need a lot of work
+        - kubernetes integration
+        - possibly that same filesystem management I need for Database or work
+
+I would say, "save deployments till last and first build a usable application".
+But making networks deployable before a UI or Database may be beneficial.
+Or at least maybe after Database.
+    - could I use hyperledger as my database to story it's own config? probably not safe
+        - if net goes down, I lose my own filesystem memory
+    - MEMORY_BANK
+
+I could get to 0.2.0 and start building out the Hyperspace App I want.
+Build the DB alongside it maybe... 
+
+things to think about ~~~~
