@@ -281,7 +281,14 @@ So now I need make sure paths are relative to where their commander called them.
         in the `core.yaml`, I override them with the peer's `hyperspace.yaml`
     - in these hyperspace configs, note that each has two ports they listen on
         - I'm not yet sure what the operations ports is
-    
+        
+## 12-16-2020
+### PHASE 0.1.0 SPAWN TEST NETWORK WITH STATIC HYPERSPACE CONFIG COMPLETED
+##### toDo: Cleanup
+- refactor cryptogen and configtxgen into modules
+- remove ./start-network.sh script and instead build and run a hyperspace binary
+- kill processes on SIGTERM
+
 ### 0.1.0 --> DONE
 
  
