@@ -97,7 +97,6 @@ func main() {
 			"--command-center", commandCenter,
 			)
 
-		fmt.Println(args)
 		// grab and set env vars
 		environment := hyperviper.GetStringSlice("environment")
 		for _, env := range environment {
@@ -119,7 +118,7 @@ func main() {
 		// maybe switch to the "Start" cmd, run them in
 		// go routines, grab their pids for deactivation later
 		// for now this is fine, when you change it, change peer as well
-		err := cmd.Run()
+		err := cmd.Start()
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -139,41 +138,41 @@ func main() {
 	Note: need to name the HYPERSPACE_CONTROLLER, not GOD. Who or what controls the Hyperspace?
 	...think more on this later
 	*/
-	//peerNodeConfigs := hyperspaceVipers["peers"]
-	//for _, hyperviper := range peerNodeConfigs { // go routine to spawn nodes?
-	//	// form the cmd line argument for the spawnNode shell script
-	//	args := make([]string, 0) // better way to do this?
-	//
-	//	// set binary and startCmd
-	//	binary := hyperviper.GetString("binary")
-	//	startCmd := hyperviper.GetString("node start")
-	//	// set the command_center for the cmdscript to the node's directory
-	//	commandCenter := filepath.Dir(hyperviper.ConfigFileUsed())
-	//	args = append(
-	//		args,
-	//		"-b", binary,
-	//		"-cmd", startCmd,
-	//		"--command-center", commandCenter,
-	//		)
-	//
-	//	// set env vars
-	//	environment := hyperviper.GetStringSlice("environment")
-	//	for _, env := range environment {
-	//		args = append(args, "-e")
-	//		args = append(args, env)
-	//	}
-	//
-	//	cmd := exec.Command(
-	//		scriptPath,
-	//		args...
-	//	)
-	//	cmd.Stdout = os.Stdout
-	//	cmd.Stderr = os.Stderr
-	//	err := cmd.Run()
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
-	//	log.Printf("Just ran subprocess %d, hanging...\n", cmd.Process.Pid)
-	//}
+	peerNodeConfigs := hyperspaceVipers["peers"]
+	for _, hyperviper := range peerNodeConfigs { // go routine to spawn nodes?
+		// form the cmd line argument for the spawnNode shell script
+		args := make([]string, 0) // better way to do this?
+
+		// set binary and startCmd
+		binary := hyperviper.GetString("binary")
+		startCmd := hyperviper.GetString("startCmd")
+		// set the command_center for the cmdscript to the node's directory
+		commandCenter := filepath.Dir(hyperviper.ConfigFileUsed())
+		args = append(
+			args,
+			"-b", binary,
+			"-cmd", startCmd,
+			"--command-center", commandCenter,
+			)
+
+		// set env vars
+		environment := hyperviper.GetStringSlice("environment")
+		for _, env := range environment {
+			args = append(args, "-e")
+			args = append(args, env)
+		}
+
+		cmd := exec.Command(
+			scriptPath,
+			args...
+		)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err := cmd.Start()
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("Just ran subprocess %d, hanging...\n", cmd.Process.Pid)
+	}
 }
 

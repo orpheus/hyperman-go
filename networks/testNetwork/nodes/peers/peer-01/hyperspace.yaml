@@ -1,7 +1,7 @@
 binary: peer-01
 startCmd: "node start"
 environment:
-      #Generic peer variables
+      # Generic peer variables
 #      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
       # bridge network as the peers
@@ -20,8 +20,14 @@ environment:
       - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
       - CORE_PEER_CHAINCODEADDRESS=peer0.org1.example.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051                                                                                                                                                                  
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
+      # Added by me: so doesn't clash with 9443 whatever's running there
       - CORE_OPERATIONS_LISTENADDRESS=127.0.0.1:9444
-
+      # Added by me: Send ledger snapshots to tmp disk
+      - CORE_LEDGER_SNAPSHOTS_ROOTDIR=/tmp/hyperledger/peer-01/ledger/snapshots
+      - CORE_PEER_ID=PEER_01
+      - CORE_PEER_OPERATIONS_LISTENADDRESS=127.0.0.1:6051
+      - CORE_PEER_MSPCONFIGPATH=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
+      - CORE_PEER_FILESYSTEMPATH=ledger
