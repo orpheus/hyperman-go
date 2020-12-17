@@ -30,3 +30,5 @@ environment:
       - CORE_PEER_ID=PEER_02
       - CORE_PEER_OPERATIONS_LISTENADDRESS=127.0.0.1:6052
       - CORE_PEER_MSPCONFIGPATH=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
+      - CORE_PEER_FILESYSTEMPATH=ledger
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6062

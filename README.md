@@ -229,21 +229,23 @@ toDo:
 1. ~~create a hyperspace config for configtxgen and create a main script to run and read from it to create the consortiums and the genesis block~~
     - DONE
 2. ~~fix network main script~~
-    - orderer binary isn't getting the `orderer.yaml`
+    ~~- orderer binary isn't getting the `orderer.yaml`~~
     - DONE
-3. spawn peers from main script
-    - update peer env vars
-    - make multiple binaries
+3. ~~spawn peers from main script~~
+    ~~- update peer env vars~~
+    ~~- make multiple binaries (manual)~~
+     -DONE
 4a. convert configtxgen and cryptogen main scripts into packages that are used
  by the network main script 
 4b. the network main script needs to create the ctg, cryp, and spawn the nodes
  (everything the start-network script is doing) 
+5. add kill switch to main script which destroys processes and frees up ports
 
-6. extra:
+Idea: extra:
     - have network paths be more dynamics, hyperspace/networks/proj-network/proj-network-qa
         - create  different networks for different projects and different networks for different staging environments within that project
           
-???? How do I handle config paths?????? 
+???? ~~How do I handle config paths??????~~ with command and control centers, the latter being done with an absolute base path to the project root
 ???? ~~How do I set the paths to the individual nodes without clashing?~~  -- DONE, send-commander
 ???? How do I make multiple binaries and put them with their folders?   
 
@@ -273,6 +275,13 @@ So now I need make sure paths are relative to where their commander called them.
 4. for the peer node config (`core.yaml`), the `ledger.snapshots.rootDir` has to be an absolute path
     - (I know, weird right?)
     - so I'm setting it to `/tmp/hyperspace/{peer-name}/ledger/snapshots`
+5. I re-copied reset the /{network_name}/config directory with a copy from fabric-samples to 
+    keep around original templates.
+    - I then copied `core.yaml` over to each `peer-0x` directory and instead of changing the values
+        in the `core.yaml`, I override them with the peer's `hyperspace.yaml`
+    - in these hyperspace configs, note that each has two ports they listen on
+        - I'm not yet sure what the operations ports is
+    
 ### 0.1.0 --> DONE
 
  
