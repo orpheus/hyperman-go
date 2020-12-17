@@ -225,10 +225,11 @@ Things I forgot and needed to remind myself
 - think about for local development saving all data to a ~/.hyperspace config
 
 toDo:
-1. create a hyperspace config for configtxgen and create a main script to run and read from it to create the consortiums and the genesis block~~~
+1. ~~create a hyperspace config for configtxgen and create a main script to run and read from it to create the consortiums and the genesis block~~
     - DONE
-2. fix network main script 
+2. ~~fix network main script~~
     - orderer binary isn't getting the `orderer.yaml`
+    - DONE
 3. spawn peers from main script
     - update peer env vars
     - make multiple binaries
@@ -241,8 +242,8 @@ toDo:
     - have network paths be more dynamics, hyperspace/networks/proj-network/proj-network-qa
         - create  different networks for different projects and different networks for different staging environments within that project
           
-???? How do I handle config paths??????
-???? How do I set the paths to the individual nodes without clashing? 
+???? How do I handle config paths?????? 
+???? ~~How do I set the paths to the individual nodes without clashing?~~  -- DONE, send-commander
 ???? How do I make multiple binaries and put them with their folders?   
 
 
