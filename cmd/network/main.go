@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -19,6 +20,7 @@ func main() {
 	// this in as a command line argument via commander
 	network := rootViper.Get("defaultNetwork")
 
+	// toDo: this hardcoded relative path needs to get remove once the control center is in place
 	networkPath := fmt.Sprintf("../networks/%s", network)
 
 	// look through network folders for the default network
@@ -35,12 +37,13 @@ func main() {
 	}
 
 	// make sure an orderer is defined
-	if !networkViper.IsSet("nodes.orderer") {
+	if !networkViper.IsSet("nodes.orderers") {
 		log.Panicf("Need to specify at least one orderer node in a hyperspace network configuration: %s", network)
 	}
 
 	// get names of the orderers
-	ordererNodes := networkViper.GetStringSlice("nodes.orderer")
+	ordererNodes := networkViper.GetStringSlice("nodes.orderers")
+	peerNodes := networkViper.GetStringSlice("nodes.peers")
 
 	// create a hyperspace vipers map
 	hyperspaceVipers := make(map[string]map[string]*viper.Viper)
@@ -56,9 +59,9 @@ func main() {
 
 	// grab peer configs if set
 	if networkViper.IsSet("nodes.peers") {
-		for _, peerName := range ordererNodes {
+		for _, peerName := range peerNodes {
 			peerPath := fmt.Sprintf("%s/nodes/peers/%s", networkPath, peerName)
-			hyperspaceVipers["orderers"][peerName] = util.SpawnHyperspaceViper(peerPath)
+			hyperspaceVipers["peers"][peerName] = util.SpawnHyperspaceViper(peerPath)
 		}
 	}
 
@@ -66,8 +69,10 @@ func main() {
 	scriptPath := networkViper.GetString("scriptPath")
 	scriptPath = fmt.Sprintf("%s/%s", networkPath, scriptPath)
 
+	fmt.Println("OKOKOK")
 	// spawn orderers
 	ordererNodeConfigs := hyperspaceVipers["orderers"]
+	fmt.Println(ordererNodeConfigs)
 	for _, hyperviper := range ordererNodeConfigs { // go routine to spawn
 		// nodes?
 		// form the cmd line argument for the spawnNode shell script
@@ -83,19 +88,18 @@ func main() {
 			// need to replace the environment relative paths
 			// with a path that the command center can recognize
 			env = strings.Replace(env, NETWORK_PATH_REPLACER, networkPath, 1 )
+			fmt.Println("export", env)
 			args = append(args, "-e", string(env))
 		}
 
-		// here we set the FABRIC_CFG_PATH to the orderer's directory
-		// for the orderer binary to find the orderer.yaml config
-		//args = append(args, "-e")
-		//pathToOrdererConfig := fmt.Sprintf("%s/nodes/orderers/%s",
-		//	networkPath, name)
-		//args = append(args, fmt.Sprintf("FABRIC_CFG_PATH=%s", pathToOrdererConfig))
-
 		//fmt.Println(fmt.Sprintf("FABRIC_CFG_PATH=%s", pathToOrdererConfig))
 		args = append(args, "-cmd", "start")
-		fmt.Println("COMMAND GO", scriptPath)
+
+		// set the command center for the cmdscript to the node's directory
+		commandCenter := filepath.Dir(hyperviper.ConfigFileUsed())
+		args = append(args, "--command-center", commandCenter)
+
+		fmt.Println("Running script:", scriptPath)
 		cmd := exec.Command(
 			scriptPath,
 			args...

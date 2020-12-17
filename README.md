@@ -188,21 +188,6 @@ Things I forgot and needed to remind myself
 
 ## Next..
 ## 12/15/2020 - 
-1. create a hyperspace config for configtxgen and create a main script to run and read from it to create the consortiums and the genesis block~~~
-    - DONE
-2. fix network main script 
-    - orderer binary isn't getting the `orderer.yaml`
-3. spawn peers from main script
-    - update peer env vars
-4. convert configtxgen and cryptogen main scripts into packages that are used
- by the network main script 
-5. the network main script needs to create the ctg, cryp, and spawn the nodes
- (everything the start-network script is doing) 
-
-6. extra:
-    - have network paths be more dynamics, hyperspace/networks/proj-network/proj-network-qa
-        - create  different networks for different projects and different networks for different staging environments within that project
-
 ### Changes
 - moved spawn-orderer.sh to deprecated folder
 - moved scriptUtils to a utils folder
@@ -234,9 +219,47 @@ Things I forgot and needed to remind myself
             - this is compared to a config that I know is a path and can just append the network path
                 - dynamic variables like this have to be dynamically parsed and replaced
                     **CREATE A KEY BANK OF PLACEHOLDER VARIABLES
+                    - now I'm not using these because fabric is performing some kind of config path magic
+
+- where you run everything... matters
+- think about for local development saving all data to a ~/.hyperspace config
+
+toDo:
+1. create a hyperspace config for configtxgen and create a main script to run and read from it to create the consortiums and the genesis block~~~
+    - DONE
+2. fix network main script 
+    - orderer binary isn't getting the `orderer.yaml`
+3. spawn peers from main script
+    - update peer env vars
+    - make multiple binaries
+4a. convert configtxgen and cryptogen main scripts into packages that are used
+ by the network main script 
+4b. the network main script needs to create the ctg, cryp, and spawn the nodes
+ (everything the start-network script is doing) 
+
+6. extra:
+    - have network paths be more dynamics, hyperspace/networks/proj-network/proj-network-qa
+        - create  different networks for different projects and different networks for different staging environments within that project
+          
+???? How do I handle config paths??????
+???? How do I set the paths to the individual nodes without clashing? 
+???? How do I make multiple binaries and put them with their folders?   
+
+
+## 12-16-2020
+1. cmdscripts can now be sent to cmdcenters anywhere in the network
+   - for instance, the network main script is sending a spawn-node process
+        - to the orderers directory and calling the binary IN the folder. Huge.
+        
+Think of cmdscripts as commanders or captain who command your fleet. They spread
+out across the network issuing commands to different sectors of the fleet.
+
+The MIND controlling all them is the Hyperspace binary. This binary is acts as the controller,
+and sits or sets it's path to the control-center which is at the top of hyperspace where 
+hyperspace is the network file systems. 
+
+So now I need make sure paths are relative to where their commander called them.
+
 ### 0.1.0 --> DONE
 
-## HYPERSPACE PLACEHOLDERS
-- orderer <-- hyperspace config
-    - `${NETWORK_PATH}`: will be replaced by the path to the active network
  

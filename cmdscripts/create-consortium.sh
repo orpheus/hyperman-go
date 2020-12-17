@@ -77,7 +77,7 @@ PARAMS=""
 ## contains the configtx.yaml that is needed for the configtxgen binary
 #CONFIG_PATH="../networks/${NETWORK}/configtxgen/"
 
-while (("$#")); do
+while (( "$#" )); do
   case "$1" in
   -n | --network)
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then

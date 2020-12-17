@@ -1,5 +1,12 @@
 #!/bin/bash
 
+source util/scriptUtils.sh
+source util/send-commander.sh 2>&1
+res=$?
+if [ $res -ne 0 ]; then
+  fatalln "Failed to send-commander"
+fi
+
 # Spawn hyperledger nodes given a binary, environment variables, and
 # start script. This allows me to build multiple binaries of the same
 # type with different names and spawn them all through a single script

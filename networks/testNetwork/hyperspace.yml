@@ -4,7 +4,6 @@
 # relative to the cmdscripts directory?
 # that way I can just list the file-name here...
 scriptPath: "../../cmdscripts/spawn-node.sh"
-
 # define which nodes you want as part of your network here
 # nodes.peer and nodes.orderer are needed paths
 # the values underneath the keys are the names of
@@ -17,8 +16,17 @@ scriptPath: "../../cmdscripts/spawn-node.sh"
 # and because I just happened to name it that way.
 # maybe just standardize to singular... nah
 nodes:
-  peer:
+  peers:
     - peer-01
     - peer-01
-  orderer:
+  orderers:
     - orderer-01
+
+# Experimental idea
+cryptogen:
+  # specify which organizations you'd want to create
+  organizations:
+    - testOrgs
+    - friendOrgs
+    - familyOrgs
+
