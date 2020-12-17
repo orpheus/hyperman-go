@@ -1,8 +1,11 @@
 #!/bin/bash
 
+# EXAMPLE OF USING spawn-node.sh
+# NO LONGER NEEDED BECAUSE OF MAIN SCRIPT
+# AND HYPER SPACE CONFIG
+
 ORDERER_PATH="../cryptogen/organizations/testOrgs/ordererOrganizations/example.com/orderers/orderer.example.com"
 GENESIS_BLOCK_PATH="../configtxgen/system-genesis-block/genesis.block"
-
 
 BINARY="-b orderer"
 ENV="-e FABRIC_LOGGING_SPEC=INFO\

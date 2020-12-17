@@ -168,7 +168,7 @@ General:
 FileLedger:
 
     # Location: The directory to store the blocks in.
-    Location: ../orderer
+    Location: ledger
 
 ################################################################################
 #
@@ -412,8 +412,8 @@ Consensus:
 
     # WALDir specifies the location at which Write Ahead Logs for etcd/raft are
     # stored. Each channel will have its own subdir named after channel ID.
-    WALDir: ../orderer/etcdraft/wal
+    WALDir: ledger/etcdraft/wal
 
     # SnapDir specifies the location at which snapshots for etcd/raft are
     # stored. Each channel will have its own subdir named after channel ID.
-    SnapDir: ../orderer/etcdraft/snapshot
+    SnapDir: ledger/etcdraft/snapshot
