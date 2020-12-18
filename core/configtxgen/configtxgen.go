@@ -61,7 +61,7 @@ func (c *Configtxgen) init (rv *core.RootViper) {
 
 	// combine hyperPath with relative path
 	output := hv.Viper.GetString("output")
-	output = fmt.Sprintf("%s/%s", hv.Path, output)
+	c.output = fmt.Sprintf("%s/%s", hv.Path, output)
 }
 
 /*
@@ -81,6 +81,9 @@ func (c *Configtxgen) Create () {
 	command.Stdout = os.Stdout
 
 	err := command.Run()
+	if err != nil {
+		log.Panicf("Cmdscript for configtxgen error: %v", err)
+	}
 	log.Printf("Configtxgen main script finished with error: %v", err)
 }
 
