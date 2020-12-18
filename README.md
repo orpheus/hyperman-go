@@ -235,11 +235,11 @@ toDo:
     ~~- update peer env vars~~
     ~~- make multiple binaries (manual)~~
      -DONE
-4a. convert configtxgen and cryptogen main scripts into packages that are used
- by the network main script 
-4b. the network main script needs to create the ctg, cryp, and spawn the nodes
- (everything the start-network script is doing) 
-5. add kill switch to main script which destroys processes and frees up ports
+4a. ~~convert configtxgen and cryptogen main scripts into packages that are used
+ by the network main script~~ 
+4b. ~~the network main script needs to create the ctg, cryp, and spawn the nodes
+ (everything the start-network script is doing)~~ 
+5. ~~add kill switch to main script which destroys processes and frees up ports~~
 
 Idea: extra:
     - have network paths be more dynamics, hyperspace/networks/proj-network/proj-network-qa
@@ -285,9 +285,9 @@ So now I need make sure paths are relative to where their commander called them.
 ## 12-16-2020
 ### PHASE 0.1.0-beta SPAWN TEST NETWORK WITH STATIC HYPERSPACE CONFIG COMPLETED
 ##### toDo: Cleanup
-- ~~refactor cryptogen and configtxgen into modules~~
-- ~~remove ./start-network.sh script and instead build and run a hyperspace binary~~
-- kill processes on SIGTERM
+- ~~refactor cryptogen and configtxgen into modules~~ DONE 12/17/20
+- ~~remove ./start-network.sh script and instead build and run a hyperspace binary~~ DONE 12/17/20
+- ~~kill processes on SIGTERM~~ DONE 12/18/20
 
 ## 12-17-2020
 - now assume you run commands from the control center
@@ -297,7 +297,7 @@ So now I need make sure paths are relative to where their commander called them.
 CONTROL_CENTER=/path/to/hyperspace_root_dir
 COMMAND_CENTER=CONTROL_CENTER/cmdscripts
 
-### 0.1.0 STATIC_CONFIG_ONE_SCRIPT_3NODES --> DONE
+### ~~0.1.0 STATIC_CONFIG_ONE_SCRIPT_3NODES --> DONE -> DONE 12/18/20~~
 
 ## 0.2.0 CMDLINE INTERFACE
     - first dynamic implementations
