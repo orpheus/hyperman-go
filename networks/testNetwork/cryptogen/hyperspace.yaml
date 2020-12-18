@@ -2,7 +2,7 @@
 
 # Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
 # Change only if you generated a custom binary name during build ouptut
-fabricBinaryName: "cryptogen"
+fabricBinary: "cryptogen"
 
 # Path to Hyperspace cmdscript. Should this path be
 # relative to the cmdscripts directory?

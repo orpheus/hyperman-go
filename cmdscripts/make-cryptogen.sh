@@ -8,6 +8,8 @@ echo "#                                             "
 echo "##############################################"
 echo
 
+source cmdscripts/util/scriptUtils.sh
+
 # Before you can bring up a network, each organization needs to generate the crypto
 # material that will define that organization on the network. Because Hyperledger
 # Fabric is a permissioned blockchain, each node and user on the network needs to
@@ -31,8 +33,6 @@ echo
 # the "registerEnroll.sh" script uses the Fabric CA client to create the identities,
 # certificates, and MSP folders that are needed to create the test network in the
 # "organizations/ordererOrganizations" directory.
-
-source util/scriptUtils.sh
 
 checkCryptogen () {
   infoln "Checking for cryptogen binary..."

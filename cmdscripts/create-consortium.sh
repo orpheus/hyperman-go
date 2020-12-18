@@ -8,7 +8,7 @@ echo "#                                             "
 echo "##############################################"
 echo
 
-source util/scriptUtils.sh
+source cmdscripts/util/scriptUtils.sh
 
 # Once you create the organization crypto material, you need to create the
 # genesis block of the orderer system channel. This block is required to bring
@@ -39,7 +39,7 @@ source util/scriptUtils.sh
 # Generate orderer system channel genesis block.
 function createConsortium() {
 
-  which $BINARY
+  which "$BINARY"
   if [ "$?" -ne 0 ]; then
     fatalln "configtxgen tool not found."
   fi
@@ -49,7 +49,7 @@ function createConsortium() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   set -x
-  $BINARY -profile $PROFILE -channelID $CHANNEL_ID -outputBlock $OUTPUT -configPath $CONFIG
+  $BINARY -profile "$PROFILE" -channelID "$CHANNEL_ID" -outputBlock "$OUTPUT" -configPath "$CONFIG"
   res=$?
   { set +x; } 2>/dev/null
   if [ $res -ne 0 ]; then
@@ -59,7 +59,7 @@ function createConsortium() {
   infoln "Generate CCP files for Org1 and Org2"
   # pass the path along to the shell file so it can reference it's
   # needed files relatively
-  "../networks/${NETWORK}/organizations/ccp-generate.sh" "../networks/${NETWORK}/organizations/"
+  "networks/${NETWORK}/organizations/ccp-generate.sh" "networks/${NETWORK}/organizations/"
   res=$?
   { set +x; } 2>/dev/null
   if [ $res -ne 0 ]; then
@@ -84,8 +84,7 @@ while (( "$#" )); do
       NETWORK=$2
       shift 2
     else
-      echo "Error: Argument for $1 is missing" >&2
-      exit 1
+      fataln "Error: Argument for $1 is missing"
     fi
     ;;
   -p | --profile)
@@ -93,8 +92,7 @@ while (( "$#" )); do
       PROFILE=$2
       shift 2
     else
-      echo "Error: Argument for $1 is missing" >&2
-      exit 1
+      fataln "Error: Argument for $1 is missing"
     fi
     ;;
   -c | --config)
@@ -102,8 +100,7 @@ while (( "$#" )); do
       CONFIG=$2
       shift 2
     else
-      echo "Error: Argument for $1 is missing" >&2
-      exit 1
+      fataln "Error: Argument for $1 is missing"
     fi
     ;;
   -ch | --channel-id)
@@ -111,8 +108,7 @@ while (( "$#" )); do
       CHANNEL_ID=$2
       shift 2
     else
-      echo "Error: Argument for $1 is missing" >&2
-      exit 1
+      fataln "Error: Argument for $1 is missing"
     fi
     ;;
   -o | --output)
@@ -120,8 +116,7 @@ while (( "$#" )); do
       OUTPUT=$2
       shift 2
     else
-      echo "Error: Argument for $1 is missing" >&2
-      exit 1
+      fataln "Error: Argument for $1 is missing"
     fi
     ;;
     -b | --binary)
@@ -129,8 +124,7 @@ while (( "$#" )); do
       BINARY=$2
       shift 2
     else
-      echo "Error: Argument for $1 is missing" >&2
-      exit 1
+      fataln "Error: Argument for $1 is missing"
     fi
     ;;
   *)

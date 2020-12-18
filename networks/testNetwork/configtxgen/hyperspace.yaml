@@ -1,8 +1,8 @@
 # Hyperspace Configtxgen Configuration
 
 # Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
-# Change only if you generated a custom binary name during build ouptut
-fabricBinaryName: "configtxgen"
+# Change only if you generated a custom binary name during build output
+fabricBinary: "configtxgen"
 
 # Path to Hyperspace cmdscript. Should this path be
 # relative to the cmdscripts directory?

@@ -11,7 +11,8 @@
 # this allows the path passed in to be relative or abs
 # depending on your preference
 
-source util/scriptUtils.sh
+# how do I make this relative?
+source cmdscripts/util/scriptUtils.sh
 
 found_cmd_location=false
 COMMAND_CENTER=""
