@@ -8,7 +8,7 @@ echo "#                                             "
 echo "##############################################"
 echo
 
-source util/scriptUtils.sh
+source cmdscripts/util/scriptUtils.sh
 
 # Once you create the organization crypto material, you need to create the
 # genesis block of the orderer system channel. This block is required to bring

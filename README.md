@@ -285,9 +285,17 @@ So now I need make sure paths are relative to where their commander called them.
 ## 12-16-2020
 ### PHASE 0.1.0-beta SPAWN TEST NETWORK WITH STATIC HYPERSPACE CONFIG COMPLETED
 ##### toDo: Cleanup
-- refactor cryptogen and configtxgen into modules
-- remove ./start-network.sh script and instead build and run a hyperspace binary
+- ~~refactor cryptogen and configtxgen into modules~~
+- ~~remove ./start-network.sh script and instead build and run a hyperspace binary~~
 - kill processes on SIGTERM
+
+## 12-17-2020
+- now assume you run commands from the control center
+    - cmdscripts now needed to reference each other via a path
+        relative to the control_center not the command_center
+        
+CONTROL_CENTER=/path/to/hyperspace_root_dir
+COMMAND_CENTER=CONTROL_CENTER/cmdscripts
 
 ### 0.1.0 STATIC_CONFIG_ONE_SCRIPT_3NODES --> DONE
 

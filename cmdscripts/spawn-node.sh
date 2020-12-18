@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source util/scriptUtils.sh
-source util/send-commander.sh 2>&1
+source cmdscripts/util/scriptUtils.sh
+source cmdscripts/util/send-commander.sh 2>&1
 res=$?
 if [ $res -ne 0 ]; then
   fatalln "Failed to send-commander"
@@ -81,7 +81,7 @@ if [ -z "$BINARY" ]; then
 fi
 
 set -x
-$BINARY $START_CMD 2>&1
+$BINARY $START_CMD 2>&1 # allow word-splitting here
 res=$?
 { set +x; } 2>/dev/null
 if [ $res -ne 0 ]; then
@@ -90,7 +90,6 @@ if [ $res -ne 0 ]; then
  exit 1
 fi
 
-echo "${BINARY} started..."
 
 
 
