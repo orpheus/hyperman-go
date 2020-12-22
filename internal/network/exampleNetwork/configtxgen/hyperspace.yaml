@@ -1,0 +1,25 @@
+# Hyperspace Configtxgen Configuration
+
+# Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
+# Change only if you generated a custom binary name during build output
+fabricBinary: "configtxgen"
+
+# Path to Hyperspace cmdscript. Should this path be
+# relative to the cmdscripts directory?
+# that way I can just list the file-name here...
+scriptPath: "../../../cmdscripts/create-consortium.sh"
+
+# Path to fabric configtx yaml configuration.
+# configtxgen will look for "configtx.yaml"
+# in the path provided, just give the path
+# to the directory that houses the config
+configPath: "."
+
+# Must match a profile listed in the configtx.yaml
+profile: "TwoOrgsOrdererGenesis"
+
+# IDK yet.. just an ID?
+channelID: "system-channel"
+
+# Path for genesis block output
+output: "system-genesis-block/genesis.block"

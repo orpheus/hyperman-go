@@ -73,9 +73,11 @@ type RootViper struct {
 Creates two Vipers, one at Hyperspace Root (the control center)
 and another at the Network Root
  */
-func CreateRootViper () *RootViper {
+func CreateRootViper (network string) *RootViper {
 	viper := SpawnHyperSpaceViper(".")
-	network := viper.GetString("defaultNetwork")
+	if network == "" {
+		network = viper.GetString("defaultNetwork")
+	}
 	networkPath := filepath.Join("networks", network)
 	networkViper := SpawnHyperSpaceViper(networkPath)
 
