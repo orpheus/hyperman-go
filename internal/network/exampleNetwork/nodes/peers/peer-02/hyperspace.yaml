@@ -1,3 +1,4 @@
+# name == binary
 binary: peer-02
 startCmd: "node start"
 environment:

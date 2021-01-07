@@ -2,11 +2,12 @@ package cryptogen
 
 import (
 	"fmt"
-	"github.com/orpheus/hyperspace/core"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/orpheus/hyperspace/core"
 )
 
 /**
@@ -25,18 +26,23 @@ type Cryptogen struct {
 	scriptPath string
 }
 
-func (c *Cryptogen) init (rv *core.RootViper) {
+func (c *Cryptogen) init(rv *core.RootViper) {
 	c.network = rv.Network
 	// this will look in the configtxgen directory in the active network
+	// -- is this comment correct?
 	c.hv = core.CreateHyperViper(filepath.Join(rv.NetworkPath, "cryptogen"))
 
 	c.fabricBinary = c.hv.Viper.GetString("fabricBinary")
 
 	scriptPath := c.hv.Viper.GetString("scriptPath")
+
+	// this will need to change if the script path isn't relative to the
+	// network, but relative to the HYPERSPACE_ROOT, in which case you
+	// would join the scriptName with the HYPERSPACE_ROOT_PATH
 	c.scriptPath = filepath.Join(c.hv.Path, scriptPath)
 }
 
-func (c *Cryptogen) Make () {
+func (c *Cryptogen) Make() {
 	for org := range c.hv.Viper.GetStringMap("configs") {
 		configPath := fmt.Sprintf("configs.%s.path", org)
 		outputPath := fmt.Sprintf("configs.%s.output", org)
@@ -67,9 +73,8 @@ func (c *Cryptogen) Make () {
 /**
 Initialize a HyperCryptogen with the RootViper
 */
-func Initialize(rv *core.RootViper)  *Cryptogen {
+func Initialize(rv *core.RootViper) *Cryptogen {
 	cryp := &Cryptogen{}
 	cryp.init(rv)
 	return cryp
 }
-
