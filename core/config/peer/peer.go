@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"github.com/orpheus/hyperspace/core/util"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
+	"os"
 	"time"
 )
 
@@ -29,12 +31,17 @@ func NewCoreYaml (filePath string) (*CoreYaml, error) {
 	return config, nil
 }
 
-func (c *CoreYaml) Write (filePath string) error {
+func (c *CoreYaml) Write (filePath string, perm os.FileMode) error {
 	d, err := yaml.Marshal(c)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		log.Fatalf("error marshing CoreYaml to bytes: %v", err)
 	}
-	fmt.Printf("--- t dump:\n%s\n\n", string(d))
+
+	err = ioutil.WriteFile(filePath,d, perm)
+	if err != nil {
+		log.Fatalf("error writing CoreYaml to OS: %v", err)
+
+	}
 	return nil
 }
 

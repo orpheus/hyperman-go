@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/stretchr/testify/require"
+	"os"
 	"testing"
 	"time"
 )
@@ -12,7 +13,7 @@ func dur (t string) time.Duration {
 }
 
 func TestLoadCoreYaml (t *testing.T) {
-	coreYaml, err := NewCoreYaml("../fabric-example-configs/core.yaml")
+	coreYaml, err := NewCoreYaml("core.yaml")
 	if err != nil {
 		t.Errorf("Failed to create CoreYaml: %v", err)
 	}
@@ -207,4 +208,21 @@ func TestLoadCoreYaml (t *testing.T) {
 	require.Equal(t, coreYaml.Metrics.Statsd.Address, "127.0.0.1:8125")
 	require.Equal(t, coreYaml.Metrics.Statsd.WriteInterval, dur("10s"))
 	require.Empty(t, coreYaml.Metrics.Statsd.Prefix)
+}
+
+func TestWriteCoreYaml (t *testing.T) {
+	coreYaml, err := NewCoreYaml("core.yaml")
+	if err != nil {
+		t.Errorf("Failed to create CoreYaml: %v", err)
+	}
+	coreYaml.Write("test_core.yaml", 0755)
+
+	coreYaml, err = NewCoreYaml("test_core.yaml")
+	if err != nil {
+		t.Errorf("Failed to load generated CoreYaml: %v", err)
+	}
+
+	t.Cleanup(func () {
+		os.Remove("test_core.yaml")
+	})
 }
