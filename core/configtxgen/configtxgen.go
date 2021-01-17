@@ -2,7 +2,7 @@ package configtxgen
 
 import (
 	"fmt"
-	"github.com/orpheus/hyperspace/core"
+	"github.com/orpheus/hyperspace/core/util"
 	"log"
 	"os"
 	"os/exec"
@@ -17,7 +17,7 @@ type Configtxgen struct {
 	// network name
 	network string
 	// hyperspace viper
-	hv *core.HyperViper
+	hv *util.HyperViper
 	// Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
 	// Changed only if you generated a custom binary name during build output
 	fabricBinary string
@@ -36,11 +36,11 @@ type Configtxgen struct {
 /*
 Read from hyperspace configuration and set properties
 */
-func (c *Configtxgen) init (rv *core.RootViper) {
+func (c *Configtxgen) init (rv *util.RootViper) {
 	c.network = rv.Network
 
 	// this will look in the configtxgen directory in the active network
-	hv := core.CreateHyperViper(filepath.Join(rv.NetworkPath, "configtxgen"))
+	hv := util.CreateHyperViper(filepath.Join(rv.NetworkPath, "configtxgen"))
 
 	c.fabricBinary = hv.Viper.GetString("fabricBinary")
 
@@ -90,7 +90,7 @@ func (c *Configtxgen) Create () {
 /**
 Initialize a HyperConfigtxgen
  */
-func Initialize(rv *core.RootViper)  *Configtxgen {
+func Initialize(rv *util.RootViper)  *Configtxgen {
 	ctg := &Configtxgen{}
 	ctg.init(rv)
 	return ctg

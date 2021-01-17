@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/orpheus/hyperspace/internal/network"
+	"github.com/orpheus/hyperspace/core/network"
 	"github.com/spf13/cobra"
 	"os"
 )

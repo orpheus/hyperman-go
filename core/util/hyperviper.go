@@ -1,4 +1,4 @@
-package core
+package util
 
 import (
 	"fmt"
@@ -21,11 +21,28 @@ for import network information relative to their station.
  */
 type HyperViper struct {
 	// Path to the directory that contains the hyperspace.yaml
+	// Could this be removed in vapor of just calling filepath.Dir(viper.ConfigFileUsed())?
 	Path string
 	// Viper instance for hyperspace config
 	// named act so you can access and call like
 	// hyperViper.cmd.GetString()
 	Viper *viper.Viper
+}
+
+func CreateViperYaml (configName string, paths ...string) *viper.Viper {
+	v := viper.New()
+	v.SetConfigName(configName)
+	v.SetConfigType("yaml")
+
+	for _, path := range paths {
+		v.AddConfigPath(path)
+	}
+
+	err := v.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
+	return v
 }
 
 /**

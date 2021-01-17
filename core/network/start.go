@@ -3,10 +3,9 @@ package network
 import (
 	"context"
 	"fmt"
-	"github.com/orpheus/hyperspace/core"
 	"github.com/orpheus/hyperspace/core/configtxgen"
 	"github.com/orpheus/hyperspace/core/cryptogen"
-	"github.com/orpheus/hyperspace/util"
+	"github.com/orpheus/hyperspace/core/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"log"
@@ -66,10 +65,10 @@ func start(network string) {
 	// to read in the active network and any other
 	// configuration that may be applicable to their
 	// entire star system.
-	rv := core.CreateRootViper(network)
+	rv := util.CreateRootViper(network)
 
 	// toDo: making crypto and creating gen block should be
-	// set only ran if certain flags are met. Move them to their
+	// generated only if certain flags are met. Move them to their
 	// own command.
 
 	// Read from the hyperspace config and make the crypto
@@ -142,7 +141,7 @@ path with the absolute path of the CONTROL_CENTER (the hyperspace directory root
 Note: need to name the HYPERSPACE_CONTROLLER, not GOD. Who or what controls the Hyperspace?
 ...think more on this later
 */
-func spawnOrderers (rv *core.RootViper, scriptPath string, ctx context.Context) {
+func spawnOrderers (rv *util.RootViper, scriptPath string, ctx context.Context) {
 	// create a key:map for orderers
 	ordererVipers := make(map[string]*viper.Viper)
 
@@ -152,7 +151,7 @@ func spawnOrderers (rv *core.RootViper, scriptPath string, ctx context.Context) 
 	for _, ordererName := range ordererNodes {
 		ordererPath := filepath.Join(rv.NetworkPath, "/nodes/orderers/", ordererName)
 		// toDo: create an orderer/peer struct with a HyperViper
-		ordererVipers[ordererName] = core.SpawnHyperSpaceViper(ordererPath)
+		ordererVipers[ordererName] = util.SpawnHyperSpaceViper(ordererPath)
 	}
 
 	for ordererName, hyperviper := range ordererVipers { // go routine?
@@ -226,7 +225,7 @@ path with the absolute path of the CONTROL_CENTER (the hyperspace directory root
 Note: need to name the HYPERSPACE_CONTROLLER, not GOD. Who or what controls the Hyperspace?
 ...think more on this later
 */
-func spawnPeers (rv *core.RootViper, scriptPath string, ctx context.Context) {
+func spawnPeers (rv *util.RootViper, scriptPath string, ctx context.Context) {
 	// create a key:map for peers
 	peerVipers := make(map[string]*viper.Viper)
 	// get the peers
@@ -235,7 +234,7 @@ func spawnPeers (rv *core.RootViper, scriptPath string, ctx context.Context) {
 	if rv.NetworkViper.IsSet("nodes.peers") {
 		for _, peerName := range peerNodes {
 			peerPath := filepath.Join(rv.NetworkPath, "/nodes/peers/", peerName)
-			peerVipers[peerName] = core.SpawnHyperSpaceViper(peerPath)
+			peerVipers[peerName] = util.SpawnHyperSpaceViper(peerPath)
 		}
 	}
 

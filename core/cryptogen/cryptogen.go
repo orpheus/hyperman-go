@@ -2,12 +2,11 @@ package cryptogen
 
 import (
 	"fmt"
+	"github.com/orpheus/hyperspace/core/util"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
-
-	"github.com/orpheus/hyperspace/core"
 )
 
 /**
@@ -18,7 +17,7 @@ type Cryptogen struct {
 	// network name
 	network string
 	// hyperspace viper
-	hv *core.HyperViper
+	hv *util.HyperViper
 	// Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
 	// Changed only if you generated a custom binary name during build output
 	fabricBinary string
@@ -26,11 +25,11 @@ type Cryptogen struct {
 	scriptPath string
 }
 
-func (c *Cryptogen) init(rv *core.RootViper) {
+func (c *Cryptogen) init(rv *util.RootViper) {
 	c.network = rv.Network
 	// this will look in the configtxgen directory in the active network
 	// -- is this comment correct?
-	c.hv = core.CreateHyperViper(filepath.Join(rv.NetworkPath, "cryptogen"))
+	c.hv = util.CreateHyperViper(filepath.Join(rv.NetworkPath, "cryptogen"))
 
 	c.fabricBinary = c.hv.Viper.GetString("fabricBinary")
 
@@ -73,7 +72,7 @@ func (c *Cryptogen) Make() {
 /**
 Initialize a HyperCryptogen with the RootViper
 */
-func Initialize(rv *core.RootViper) *Cryptogen {
+func Initialize(rv *util.RootViper) *Cryptogen {
 	cryp := &Cryptogen{}
 	cryp.init(rv)
 	return cryp

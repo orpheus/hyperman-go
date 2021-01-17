@@ -15,6 +15,37 @@
 
 2. Modify that golang struct and write its output
 
+### New Considerations (1.10.21)
+
+   - I cannot use viper to read and write configs for two reasons
+      - it's write (save-as) outputs keys in all lowercase
+      - not knowing which config variables will be overridden, I'd be a
+        hassle to have to read in each field from one config and write
+        it to another... goal would be to have two structs I can merge
+
+   - I cannot read in a yaml file and preserve anchors and dumps
+   
+**Current working idea: **
+
+   - Read in hyperspace_network_config.yaml with a viper
+      - for each node and top-level configuration
+         - load Config into structs
+   - Read/load default fabric configs into structs (where are these
+     stored?)
+   - Merge related structs (go-yaml?)
+   - Write structs as fabric config yaml files (go-yaml)
+   
+** More things to note: **
+
+    - I need to generate hyperspace.yaml(s) as well as the templates
+    - the hys_net_config will generate pre-filled fabric configurations
+        - I will generate the hyperspace configs with the rest of the info
+            specified. This info is needed by MIND to run the binaries. 
+            - the fabric configs are just needed by the configs
+            - where should overrides be set? hyperspace or fabric?
+            - Should hyperspace configs be used to set fabric configs?
+                - or should that just always be done in the fabric configs
+
 ### DoD
 
 1. I can read in a hyperspace network configuration, from it, create  4

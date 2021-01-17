@@ -2,7 +2,7 @@ package network
 
 import (
 	"fmt"
-	"github.com/orpheus/hyperspace/util"
+	"github.com/orpheus/hyperspace/core/util"
 	"github.com/spf13/cobra"
 	"log"
 	"os"
@@ -26,9 +26,9 @@ func createCmd() *cobra.Command {
 
 func makeNetwork (networkName string) error {
 	// get path to project
-	commandCenter := os.Getenv("HYPERSPACE_PATH")
-	if len(commandCenter) == 0 {
-		commandCenter = "."
+	controlCenter := os.Getenv("HYPERSPACE_PATH")
+	if len(controlCenter) == 0 {
+		controlCenter = "."
 	}
 	// get desired network root location. the network root
 	// is the path to the`networks` directory that contains
@@ -37,10 +37,10 @@ func makeNetwork (networkName string) error {
 	// networkRoot = "$HYPERLEDGER_ROOT/networks"
 	networkRoot := os.Getenv("HYPERSPACE_NETROOT")
 	if len(networkRoot) == 0 {
-		// relative path
+		// relative path, assuming we're running the code from the root of the Hyperspace project
 		networkRoot = "networks"
 	}
-	networkRoot = filepath.Join(commandCenter, networkRoot)
+	networkRoot = filepath.Join(controlCenter, networkRoot)
 
 	fmt.Printf("Network root: %s", networkRoot)
 
@@ -55,18 +55,24 @@ func makeNetwork (networkName string) error {
 		fmt.Println("Network already exists, overwriting...")
 		//log.Fatalf("Network path already exists: %s", newNetworkPath)
 	}
+
 	// create directory for new network
-	err = os.MkdirAll(newNetworkPath, 0755)
-	if err != nil {
-		log.Fatalf("Failed to make new network directory: %v", err)
-	}
+	CreateDirAll(newNetworkPath)
 
 	// create directories for [config, configtxgen, cryptogen, nodes, organizations
-	// USE NETWORK_HYPERSPACE.YAML TO CREATE THE NETWORK
+	// USE a HYPERSPACE_NETWORK_CONFIG.yaml to generate the network
 	// 1. Create a hyperspace network config (later, interactive console)
 	// 2. Call `hyperspace network create "newNetwork" path/to/network-hyperspace.yaml`
 	// 3. Code, 1. Reads config 2. Creates node system for each node listed
 
 	return nil
+}
+
+func CreateDirAll (pathName string) {
+	// create directory for new network
+	err := os.MkdirAll(pathName, 0755)
+	if err != nil {
+		log.Fatalf("Failed to make new network directory: %v", err)
+	}
 }
 
