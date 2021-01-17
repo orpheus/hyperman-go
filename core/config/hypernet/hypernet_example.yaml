@@ -1,0 +1,38 @@
+# toDo: strip defaults
+
+orderers:
+  # unique name
+  orderer-01:
+    # node-type: orderer|peer
+    type: orderer
+    # fabric overrides. everything below here will get applied to the
+    # fabric binary on network  startup. see the orderer.yaml to see
+    # what config is possible. the format here is the exact same as the
+    # orderer.yaml (it's meant to  literally override that yaml)
+    config:
+      operations:
+        listenAddress: 127.0.0.1:6050
+
+peers:
+  # unique name
+  peer-01:
+    # fabric core.yaml config
+    config:
+
+# Configuration for the configtxgen fabric binary.
+# Creates system-channel and genesis block.
+configtxgen:
+  fabricBinary: configtxgen # toDo: make default
+  scriptPath: create-consortium # toDo: make default and change to ScriptName
+  configPath: "." # toDo: make default
+  # Must match a profile listed in the configtx.yaml
+  profile: "TwoOrgsOrdererGenesis"
+  channelID: "system-channel"
+  output: "system-genesis-block/genesis.block" # todo: make default
+  # fabric configtx.yaml config
+  config:
+    organizations:
+      - &OrdererOrg
+        name: Ryan
+
+    
