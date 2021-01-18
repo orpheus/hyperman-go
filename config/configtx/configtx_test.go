@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+var testYaml = "configtx_test.yaml"
+
 //----------------------------------------------------------------------------------
 // TestLoadNew()
 //----------------------------------------------------------------------------------
@@ -15,7 +17,7 @@ import (
 // to the configtx.yaml file read in.
 //----------------------------------------------------------------------------------
 func TestLoadNew(t *testing.T) {
-	c := NewConfigtxYaml("configtx.yaml")
+	c := NewConfigtxYaml(testYaml)
 
 	// -------------------------------------------------------------
 	// PROFILE 1, "TwoOrgsOrdererGenesis"
@@ -121,7 +123,7 @@ func TestLoadNew(t *testing.T) {
 func TestReadAndWrite(t *testing.T) {
 	generated := "configtx2.yaml"
 
-	coreYaml := NewConfigtxYaml("configtx.yaml")
+	coreYaml := NewConfigtxYaml(testYaml)
 
 	coreYaml.Write(generated, 0755)
 
@@ -140,16 +142,36 @@ func TestReadAndWrite(t *testing.T) {
 // present in the merged config struct.
 //----------------------------------------------------------------------------------
 func TestMerge(t *testing.T) {
-	c := NewConfigtxYaml("configtx.yaml")
+	c := NewConfigtxYaml(testYaml)
 
 	// read in another instance of a core config
 	// simulates reading in a user's core config
-	c2 := NewConfigtxYaml("configtx.yaml")
+	c2 := NewConfigtxYaml(testYaml)
 
 	// change some values
 	c2.Profiles["TwoOrgsChannel"].Consortium = "TestConsortium"
 	c2.Profiles["TwoOrgsOrdererGenesis"].Consortiums["SampleConsortium"].Organizations[0].Name = "Test_Org1MSP"
 	c2.Profiles["TwoOrgsOrdererGenesis"].Orderer.Addresses[0] = "test.example.org:9999"
+
+	// add a profile
+	org := &Organization{
+		Name: "MyNewOrg",
+	}
+	profile := &Profile{
+		Orderer:      &Orderer{
+			OrdererType:   "",
+			Addresses:     nil,
+			BatchTimeout:  0,
+			BatchSize:     BatchSize{},
+			Kafka:         Kafka{},
+			EtcdRaft:      nil,
+			Organizations: []*Organization{ org },
+			MaxChannels:   0,
+			Capabilities:  nil,
+			Policies:      nil,
+		},
+	}
+	c2.Profiles["MyNewProfile"] = profile
 
 	c.Merge(c2)
 
@@ -157,4 +179,7 @@ func TestMerge(t *testing.T) {
 	require.Equal(t, c.Profiles["TwoOrgsChannel"].Consortium, "TestConsortium")
 	require.Equal(t, c.Profiles["TwoOrgsOrdererGenesis"].Consortiums["SampleConsortium"].Organizations[0].Name, "Test_Org1MSP")
 	require.Equal(t, c.Profiles["TwoOrgsOrdererGenesis"].Orderer.Addresses[0], "test.example.org:9999")
+
+	require.Equal(t, c.Profiles["MyNewProfile"].Orderer.Organizations[0].Name, "MyNewOrg")
+
 }

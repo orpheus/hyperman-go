@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+var testYaml = "core_test.yaml"
+
 //----------------------------------------------------------------------------------
 // TestLoadNew()
 //----------------------------------------------------------------------------------
@@ -15,7 +17,7 @@ import (
 // to the core.yaml file read in.
 //----------------------------------------------------------------------------------
 func TestLoadNew(t *testing.T) {
-	coreYaml := NewCoreYaml("core.yaml")
+	coreYaml := NewCoreYaml(testYaml)
 
 	require.Equal(t, coreYaml.Peer.ID, "jdoe")
 	require.Equal(t, coreYaml.Peer.NetworkId, "dev")
@@ -218,7 +220,7 @@ func TestLoadNew(t *testing.T) {
 func TestWrite(t *testing.T) {
 	generated := "test_core.yaml"
 
-	coreYaml := NewCoreYaml("core.yaml")
+	coreYaml := NewCoreYaml(testYaml)
 
 	coreYaml.Write(generated, 0755)
 
@@ -237,11 +239,11 @@ func TestWrite(t *testing.T) {
 // present in the merged config struct.
 //----------------------------------------------------------------------------------
 func TestMerge(t *testing.T) {
-	baseCoreYaml := NewCoreYaml("core.yaml")
+	baseCoreYaml := NewCoreYaml(testYaml)
 
 	// read in another instance of a core config
 	// simulates reading in a user's core config
-	userCoreYaml := NewCoreYaml("core.yaml")
+	userCoreYaml := NewCoreYaml(testYaml)
 
 	// change some values
 	userCoreYaml.Peer.ID = "test_id"

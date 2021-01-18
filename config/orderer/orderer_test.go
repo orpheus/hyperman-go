@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+var testYaml = "orderer_test.yaml"
+
 //----------------------------------------------------------------------------------
 // TestLoadNew()
 //----------------------------------------------------------------------------------
@@ -15,7 +17,7 @@ import (
 // to the orderer.yaml file read in.
 //----------------------------------------------------------------------------------
 func TestLoadNew(t *testing.T) {
-	o := NewOrdererYaml("orderer.yaml")
+	o := NewOrdererYaml(testYaml)
 
 	require.Equal(t, o.General.ListenAddress, "127.0.0.1")
 	require.Equal(t, o.General.ListenPort, uint16(7050))
@@ -117,7 +119,7 @@ func TestLoadNew(t *testing.T) {
 func TestWrite(t *testing.T) {
 	generated := "test_orderer.yaml"
 
-	OrdererYaml := NewOrdererYaml("orderer.yaml")
+	OrdererYaml := NewOrdererYaml(testYaml)
 	OrdererYaml.Write(generated, 0755)
 
 	OrdererYaml = NewOrdererYaml(generated)
@@ -135,11 +137,11 @@ func TestWrite(t *testing.T) {
 // present in the merged config struct.
 //----------------------------------------------------------------------------------
 func TestMerge(t *testing.T) {
-	baseOrdererYaml := NewOrdererYaml("orderer.yaml")
+	baseOrdererYaml := NewOrdererYaml(testYaml)
 
 	// read in another instance of a Orderer config
 	// simulates reading in a user's Orderer config
-	userOrdererYaml := NewOrdererYaml("orderer.yaml")
+	userOrdererYaml := NewOrdererYaml(testYaml)
 
 	// change some values
 	userOrdererYaml.General.ListenAddress = "999.9.9.9"
