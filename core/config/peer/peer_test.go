@@ -1,18 +1,13 @@
 package config
 
 import (
+	"github.com/orpheus/hyperspace/core/util"
 	"github.com/stretchr/testify/require"
 	"os"
 	"testing"
-	"time"
 )
 
-func dur (t string) time.Duration {
-	d, _ := time.ParseDuration(t)
-	return d
-}
-
-func TestLoadCoreYaml (t *testing.T) {
+func TestLoadCoreYaml(t *testing.T) {
 	coreYaml, err := NewCoreYaml("core.yaml")
 	if err != nil {
 		t.Errorf("Failed to create CoreYaml: %v", err)
@@ -27,61 +22,61 @@ func TestLoadCoreYaml (t *testing.T) {
 	require.Empty(t, coreYaml.Peer.ChaincodeListenAddress)
 	require.False(t, coreYaml.Peer.AddressAutoDetect)
 
-	require.Equal(t, coreYaml.Peer.Keepalive.Interval, dur("7200s"))
-	require.Equal(t, coreYaml.Peer.Keepalive.Timeout, dur("20s"))
-	require.Equal(t, coreYaml.Peer.Keepalive.MinInterval, dur("60s"))
-	require.Equal(t, coreYaml.Peer.Keepalive.Client.Interval, dur("60s"))
-	require.Equal(t, coreYaml.Peer.Keepalive.Client.Timeout, dur("20s"))
-	require.Equal(t, coreYaml.Peer.Keepalive.DeliveryClient.Interval, dur("60s"))
-	require.Equal(t, coreYaml.Peer.Keepalive.DeliveryClient.Timeout, dur("20s"))
+	require.Equal(t, coreYaml.Peer.Keepalive.Interval, util.Dur("7200s"))
+	require.Equal(t, coreYaml.Peer.Keepalive.Timeout, util.Dur("20s"))
+	require.Equal(t, coreYaml.Peer.Keepalive.MinInterval, util.Dur("60s"))
+	require.Equal(t, coreYaml.Peer.Keepalive.Client.Interval, util.Dur("60s"))
+	require.Equal(t, coreYaml.Peer.Keepalive.Client.Timeout, util.Dur("20s"))
+	require.Equal(t, coreYaml.Peer.Keepalive.DeliveryClient.Interval, util.Dur("60s"))
+	require.Equal(t, coreYaml.Peer.Keepalive.DeliveryClient.Timeout, util.Dur("20s"))
 
 	require.Equal(t, coreYaml.Peer.Gossip.Boostrap, "127.0.0.1:7051")
 	require.False(t, coreYaml.Peer.Gossip.UseLeaderElection)
 	require.True(t, coreYaml.Peer.Gossip.OrgLeader)
-	require.Equal(t, coreYaml.Peer.Gossip.MembershipTrackerInterval, dur("5s"))
+	require.Equal(t, coreYaml.Peer.Gossip.MembershipTrackerInterval, util.Dur("5s"))
 	require.Empty(t, coreYaml.Peer.Gossip.Endpoint)
 	require.Equal(t, coreYaml.Peer.Gossip.MaxBlockCountToStore, 10)
-	require.Equal(t, coreYaml.Peer.Gossip.MaxPropagationBurstLatency, dur("10ms"))
+	require.Equal(t, coreYaml.Peer.Gossip.MaxPropagationBurstLatency, util.Dur("10ms"))
 	require.Equal(t, coreYaml.Peer.Gossip.MaxPropagationBurstSize, 10)
 	require.Equal(t, coreYaml.Peer.Gossip.PropagateIterations, 1)
 	require.Equal(t, coreYaml.Peer.Gossip.PropagatePeerNum, 3)
-	require.Equal(t, coreYaml.Peer.Gossip.PullInterval, dur("4s"))
+	require.Equal(t, coreYaml.Peer.Gossip.PullInterval, util.Dur("4s"))
 	require.Equal(t, coreYaml.Peer.Gossip.PullPeerNum, 3)
-	require.Equal(t, coreYaml.Peer.Gossip.RequestStateInfoInterval, dur("4s"))
-	require.Equal(t, coreYaml.Peer.Gossip.PublishStateInfoInterval, dur("4s"))
+	require.Equal(t, coreYaml.Peer.Gossip.RequestStateInfoInterval, util.Dur("4s"))
+	require.Equal(t, coreYaml.Peer.Gossip.PublishStateInfoInterval, util.Dur("4s"))
 	require.Empty(t, coreYaml.Peer.Gossip.StateInfoRetentionInterval)
-	require.Equal(t, coreYaml.Peer.Gossip.PublishCertPeriod, dur("10s"))
+	require.Equal(t, coreYaml.Peer.Gossip.PublishCertPeriod, util.Dur("10s"))
 	require.False(t, coreYaml.Peer.Gossip.SkipBlockVerification)
-	require.Equal(t, coreYaml.Peer.Gossip.DialTimeout, dur("3s"))
-	require.Equal(t, coreYaml.Peer.Gossip.ConnTimeout, dur("2s"))
+	require.Equal(t, coreYaml.Peer.Gossip.DialTimeout, util.Dur("3s"))
+	require.Equal(t, coreYaml.Peer.Gossip.ConnTimeout, util.Dur("2s"))
 	require.Equal(t, coreYaml.Peer.Gossip.RecvBuffSize, 20)
 	require.Equal(t, coreYaml.Peer.Gossip.SendBuffSize, 200)
-	require.Equal(t, coreYaml.Peer.Gossip.DigestWaitTime, dur("1s"))
-	require.Equal(t, coreYaml.Peer.Gossip.RequestWaitTime, dur("1500ms"))
-	require.Equal(t, coreYaml.Peer.Gossip.ResponseWaitTime, dur("2s"))
-	require.Equal(t, coreYaml.Peer.Gossip.AliveTimeInterval, dur("5s"))
-	require.Equal(t, coreYaml.Peer.Gossip.AliveExpirationTimeout, dur("25s"))
-	require.Equal(t, coreYaml.Peer.Gossip.ReconnectInterval, dur("25s"))
+	require.Equal(t, coreYaml.Peer.Gossip.DigestWaitTime, util.Dur("1s"))
+	require.Equal(t, coreYaml.Peer.Gossip.RequestWaitTime, util.Dur("1500ms"))
+	require.Equal(t, coreYaml.Peer.Gossip.ResponseWaitTime, util.Dur("2s"))
+	require.Equal(t, coreYaml.Peer.Gossip.AliveTimeInterval, util.Dur("5s"))
+	require.Equal(t, coreYaml.Peer.Gossip.AliveExpirationTimeout, util.Dur("25s"))
+	require.Equal(t, coreYaml.Peer.Gossip.ReconnectInterval, util.Dur("25s"))
 	require.Equal(t, coreYaml.Peer.Gossip.MaxConnectionAttempts, 120)
 	require.Equal(t, coreYaml.Peer.Gossip.MsgExpirationFactor, 20)
 	require.Empty(t, coreYaml.Peer.Gossip.ExternalEndpoint)
-	require.Equal(t, coreYaml.Peer.Gossip.Election.StartupGracePeriod, dur("15s"))
-	require.Equal(t, coreYaml.Peer.Gossip.Election.MembershipSampleInterval, dur("1s"))
-	require.Equal(t, coreYaml.Peer.Gossip.Election.LeaderAliveThreshold, dur("10s"))
-	require.Equal(t, coreYaml.Peer.Gossip.Election.LeaderElectionDuration, dur("5s"))
-	require.Equal(t, coreYaml.Peer.Gossip.PvtData.PullRetryThreshold, dur("60s"))
+	require.Equal(t, coreYaml.Peer.Gossip.Election.StartupGracePeriod, util.Dur("15s"))
+	require.Equal(t, coreYaml.Peer.Gossip.Election.MembershipSampleInterval, util.Dur("1s"))
+	require.Equal(t, coreYaml.Peer.Gossip.Election.LeaderAliveThreshold, util.Dur("10s"))
+	require.Equal(t, coreYaml.Peer.Gossip.Election.LeaderElectionDuration, util.Dur("5s"))
+	require.Equal(t, coreYaml.Peer.Gossip.PvtData.PullRetryThreshold, util.Dur("60s"))
 	require.Equal(t, coreYaml.Peer.Gossip.PvtData.TransientstoreMaxBlockRetention, 1000)
-	require.Equal(t, coreYaml.Peer.Gossip.PvtData.PushAckTimeout, dur("3s"))
+	require.Equal(t, coreYaml.Peer.Gossip.PvtData.PushAckTimeout, util.Dur("3s"))
 	require.Equal(t, coreYaml.Peer.Gossip.PvtData.BtlPullMargin, 10)
 	require.Equal(t, coreYaml.Peer.Gossip.PvtData.ReconcileBatchSize, 10)
-	require.Equal(t, coreYaml.Peer.Gossip.PvtData.ReconcileSleepInterval, dur("1m"))
+	require.Equal(t, coreYaml.Peer.Gossip.PvtData.ReconcileSleepInterval, util.Dur("1m"))
 	require.True(t, coreYaml.Peer.Gossip.PvtData.ReconciliationEnabled)
 	require.False(t, coreYaml.Peer.Gossip.PvtData.SkipPullingInvalidTransactionsDuringCommit)
 	require.Equal(t, coreYaml.Peer.Gossip.PvtData.ImplicitCollectionDisseminationPolicy.RequiredPeerCount, 0)
 	require.Equal(t, coreYaml.Peer.Gossip.PvtData.ImplicitCollectionDisseminationPolicy.MaxPeerCount, 1)
 	require.False(t, coreYaml.Peer.Gossip.State.Enabled)
-	require.Equal(t, coreYaml.Peer.Gossip.State.CheckInterval, dur("10s"))
-	require.Equal(t, coreYaml.Peer.Gossip.State.ResponseTimeout, dur("3s"))
+	require.Equal(t, coreYaml.Peer.Gossip.State.CheckInterval, util.Dur("10s"))
+	require.Equal(t, coreYaml.Peer.Gossip.State.ResponseTimeout, util.Dur("3s"))
 	require.Equal(t, coreYaml.Peer.Gossip.State.BatchSize, 10)
 	require.Equal(t, coreYaml.Peer.Gossip.State.BlockBufferSize, 20)
 	require.Equal(t, coreYaml.Peer.Gossip.State.MaxRetries, 3)
@@ -95,7 +90,7 @@ func TestLoadCoreYaml (t *testing.T) {
 	require.Empty(t, coreYaml.Peer.Tls.ClientKey.File)
 	require.Empty(t, coreYaml.Peer.Tls.ClientCert.File)
 
-	require.Equal(t, coreYaml.Peer.Authentication.Timewindow, dur("15m"))
+	require.Equal(t, coreYaml.Peer.Authentication.Timewindow, util.Dur("15m"))
 	require.Equal(t, coreYaml.Peer.FileSystemPath, "/var/hyperledger/production")
 
 	require.Equal(t, coreYaml.Peer.BCCSP.Default, "SW")
@@ -110,11 +105,11 @@ func TestLoadCoreYaml (t *testing.T) {
 
 	require.Equal(t, coreYaml.Peer.MspConfigPath, "msp")
 	require.Equal(t, coreYaml.Peer.LocalMspId, "SampleOrg")
-	require.Equal(t, coreYaml.Peer.Client.ConnTimeout, dur("3s"))
+	require.Equal(t, coreYaml.Peer.Client.ConnTimeout, util.Dur("3s"))
 
-	require.Equal(t, coreYaml.Peer.Deliveryclient.ReConnectBackoffThreshold, dur("3600s"))
-	require.Equal(t, coreYaml.Peer.Deliveryclient.ReconnectTotalTimeThreshold, dur("3600s"))
-	require.Equal(t, coreYaml.Peer.Deliveryclient.ConnTimeout, dur("3s"))
+	require.Equal(t, coreYaml.Peer.Deliveryclient.ReConnectBackoffThreshold, util.Dur("3600s"))
+	require.Equal(t, coreYaml.Peer.Deliveryclient.ReconnectTotalTimeThreshold, util.Dur("3600s"))
+	require.Equal(t, coreYaml.Peer.Deliveryclient.ConnTimeout, util.Dur("3s"))
 	require.Empty(t, coreYaml.Peer.Deliveryclient.AddressOverrides)
 
 	require.Equal(t, coreYaml.Peer.LocalMspType, "bccsp")
@@ -163,9 +158,9 @@ func TestLoadCoreYaml (t *testing.T) {
 	require.Equal(t, coreYaml.Chaincode.Java.Runtime, "$(DOCKER_NS)/fabric-javaenv:$(TWO_DIGIT_VERSION)")
 	require.Equal(t, coreYaml.Chaincode.Node.Runtime, "$(DOCKER_NS)/fabric-javaenv:$(TWO_DIGIT_VERSION)")
 	require.Empty(t, coreYaml.Chaincode.ExternalBuilders)
-	require.Equal(t, coreYaml.Chaincode.InstallTimeout, dur("300s"))
-	require.Equal(t, coreYaml.Chaincode.Startuptimeout, dur("300s"))
-	require.Equal(t, coreYaml.Chaincode.Executetimeout, dur("30s"))
+	require.Equal(t, coreYaml.Chaincode.InstallTimeout, util.Dur("300s"))
+	require.Equal(t, coreYaml.Chaincode.Startuptimeout, util.Dur("300s"))
+	require.Equal(t, coreYaml.Chaincode.Executetimeout, util.Dur("30s"))
 	require.Equal(t, coreYaml.Chaincode.Mode, "net")
 	require.Equal(t, coreYaml.Chaincode.Keepalive, 0)
 	require.Equal(t, coreYaml.Chaincode.System.Lifecycle, "enable")
@@ -184,7 +179,7 @@ func TestLoadCoreYaml (t *testing.T) {
 	require.Empty(t, coreYaml.Ledger.State.CouchDBConfig.Password)
 	require.Equal(t, coreYaml.Ledger.State.CouchDBConfig.MaxRetries, 3)
 	require.Equal(t, coreYaml.Ledger.State.CouchDBConfig.MaxRetriesOnStartup, 10)
-	require.Equal(t, coreYaml.Ledger.State.CouchDBConfig.RequestTimeout, dur("35s"))
+	require.Equal(t, coreYaml.Ledger.State.CouchDBConfig.RequestTimeout, util.Dur("35s"))
 	require.Equal(t, coreYaml.Ledger.State.CouchDBConfig.InternalQueryLimit, 1000)
 	require.Equal(t, coreYaml.Ledger.State.CouchDBConfig.MaxBatchUpdateSize, 1000)
 	require.Equal(t, coreYaml.Ledger.State.CouchDBConfig.WarmIndexesAfterNBlocks, 1)
@@ -193,7 +188,7 @@ func TestLoadCoreYaml (t *testing.T) {
 	require.True(t, coreYaml.Ledger.History.EnableHistoryDatabase)
 	require.Equal(t, coreYaml.Ledger.PvtdataStore.CollElgProcMaxDbBatchSize, 5000)
 	require.Equal(t, coreYaml.Ledger.PvtdataStore.CollElgProcDbBatchesInterval, 1000)
-	require.Equal(t, coreYaml.Ledger.PvtdataStore.DeprioritizedDataReconcilerInterval, dur("60m"))
+	require.Equal(t, coreYaml.Ledger.PvtdataStore.DeprioritizedDataReconcilerInterval, util.Dur("60m"))
 	require.Equal(t, coreYaml.Ledger.Snapshots.RootDir, "/var/hyperledger/production/snapshots")
 
 	require.Equal(t, coreYaml.Operations.ListenAddress, "127.0.0.1:9443")
@@ -206,11 +201,11 @@ func TestLoadCoreYaml (t *testing.T) {
 	require.Equal(t, coreYaml.Metrics.Provider, "disabled")
 	require.Equal(t, coreYaml.Metrics.Statsd.Network, "udp")
 	require.Equal(t, coreYaml.Metrics.Statsd.Address, "127.0.0.1:8125")
-	require.Equal(t, coreYaml.Metrics.Statsd.WriteInterval, dur("10s"))
+	require.Equal(t, coreYaml.Metrics.Statsd.WriteInterval, util.Dur("10s"))
 	require.Empty(t, coreYaml.Metrics.Statsd.Prefix)
 }
 
-func TestWriteCoreYaml (t *testing.T) {
+func TestWriteCoreYaml(t *testing.T) {
 	coreYaml, err := NewCoreYaml("core.yaml")
 	if err != nil {
 		t.Errorf("Failed to create CoreYaml: %v", err)
@@ -222,12 +217,12 @@ func TestWriteCoreYaml (t *testing.T) {
 		t.Errorf("Failed to load generated CoreYaml: %v", err)
 	}
 
-	t.Cleanup(func () {
+	t.Cleanup(func() {
 		os.Remove("test_core.yaml")
 	})
 }
 
-func TestMergeCoreYamlStructs (t *testing.T) {
+func TestMergeCoreYamlStructs(t *testing.T) {
 	baseCoreYaml, err := NewCoreYaml("core.yaml")
 	if err != nil {
 		t.Errorf("Failed to create CoreYaml: %v", err)

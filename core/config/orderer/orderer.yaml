@@ -402,8 +402,8 @@ ChannelParticipation:
 #
 #   Consensus Configuration
 #
-#   - This section contains config options for a consensus plugin. It is opaque
-#     to orderer, and completely up to consensus implementation to make use of.
+#   - # The allowed key-value pairs here depend on consensus plugin. For etcd/raft,
+    #    # we use following options:
 #
 ################################################################################
 Consensus:

@@ -10,12 +10,11 @@ import (
 type uniqueName string
 
 type Hypernet struct {
-	Peers map[uniqueName]struct{
-		binaryName string `yaml:"binaryName"`
+	Peers map[uniqueName]struct {
+		binaryName string          `yaml:"binaryName"`
 		config     config.CoreYaml `yaml:"config"`
 	} `yaml:"peers"`
-	Orderers map[uniqueName]struct{
-
+	Orderers map[uniqueName]struct {
 	} `yaml:"orderers"`
 	// todo: generate any values that can be that aren't explicitly set
 	Configtxgen struct {
@@ -34,11 +33,10 @@ type Hypernet struct {
 	}
 	// todo: fill out
 	Cryptogen struct {
-
 	}
 }
 
-func NewHypernet (filePath string) (*Hypernet, error){
+func NewHypernet(filePath string) (*Hypernet, error) {
 	config := &Hypernet{}
 
 	yamlBytes, err := util.ReadInYamlData(filePath)
