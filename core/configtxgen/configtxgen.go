@@ -2,7 +2,7 @@ package configtxgen
 
 import (
 	"fmt"
-	"github.com/orpheus/hyperspace/core/util"
+	"github.com/orpheus/hyperspace/util"
 	"log"
 	"os"
 	"os/exec"

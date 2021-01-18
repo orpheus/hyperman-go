@@ -2,8 +2,8 @@ package config
 
 import (
 	"fmt"
-	config "github.com/orpheus/hyperspace/core/config/peer"
-	"github.com/orpheus/hyperspace/core/util"
+	config "github.com/orpheus/hyperspace/config/peer"
+	"github.com/orpheus/hyperspace/util"
 	"gopkg.in/yaml.v2"
 )
 

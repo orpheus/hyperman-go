@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/orpheus/hyperspace/core/util"
+	"github.com/orpheus/hyperspace/util"
 	"os"
 	"time"
 )
@@ -42,10 +42,10 @@ func (c *OrdererYaml) Merge(config *OrdererYaml) {
 
 // OrdererYaml directly corresponds to the orderer config YAML.
 type OrdererYaml struct {
-	General              General              `yaml:"General"`
-	FileLedger           FileLedger           `yaml:"FileLedger"`
-	Kafka                Kafka                `yaml:"Kafka"`
-	Debug                Debug                `yaml:"Debug"`
+	General    General    `yaml:"General"`
+	FileLedger FileLedger `yaml:"FileLedger"`
+	Kafka      Kafka      `yaml:"Kafka"`
+	Debug      Debug      `yaml:"Debug"`
 	// if the dynamism of Consensus proves to be difficult,
 	// change it to be a map[string]string and for the Merge fn
 	// loop over the override struct and set the keys and values

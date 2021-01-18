@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/orpheus/hyperspace/core/util"
+	"github.com/orpheus/hyperspace/util"
 	"os"
 	"time"
 )

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/orpheus/hyperspace/core/configtxgen"
 	"github.com/orpheus/hyperspace/core/cryptogen"
-	"github.com/orpheus/hyperspace/core/util"
+	"github.com/orpheus/hyperspace/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"log"
