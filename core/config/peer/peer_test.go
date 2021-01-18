@@ -7,11 +7,15 @@ import (
 	"testing"
 )
 
-func TestLoadCoreYaml(t *testing.T) {
-	coreYaml, err := NewCoreYaml("core.yaml")
-	if err != nil {
-		t.Errorf("Failed to create CoreYaml: %v", err)
-	}
+//----------------------------------------------------------------------------------
+// TestLoadNew()
+//----------------------------------------------------------------------------------
+// Loads an core.yaml file into an CoreYaml config struct and then checks
+// each value of the struct to make sure the fields got set correctly according
+// to the core.yaml file read in.
+//----------------------------------------------------------------------------------
+func TestLoadNew(t *testing.T) {
+	coreYaml := NewCoreYaml("core.yaml")
 
 	require.Equal(t, coreYaml.Peer.ID, "jdoe")
 	require.Equal(t, coreYaml.Peer.NetworkId, "dev")
@@ -205,35 +209,39 @@ func TestLoadCoreYaml(t *testing.T) {
 	require.Empty(t, coreYaml.Metrics.Statsd.Prefix)
 }
 
-func TestWriteCoreYaml(t *testing.T) {
-	coreYaml, err := NewCoreYaml("core.yaml")
-	if err != nil {
-		t.Errorf("Failed to create CoreYaml: %v", err)
-	}
-	coreYaml.Write("test_core.yaml", 0755)
+//----------------------------------------------------------------------------------
+// TestWrite()
+//----------------------------------------------------------------------------------
+// Reads in an core.yaml, writes it the file system under another name, creating
+// a new core.yaml, then reads the generated yaml in and expects no errors.
+//----------------------------------------------------------------------------------
+func TestWrite(t *testing.T) {
+	generated := "test_core.yaml"
 
-	coreYaml, err = NewCoreYaml("test_core.yaml")
-	if err != nil {
-		t.Errorf("Failed to load generated CoreYaml: %v", err)
-	}
+	coreYaml := NewCoreYaml("core.yaml")
+
+	coreYaml.Write(generated, 0755)
+
+	coreYaml = NewCoreYaml(generated)
 
 	t.Cleanup(func() {
-		os.Remove("test_core.yaml")
+		_ = os.Remove(generated)
 	})
 }
 
-func TestMergeCoreYamlStructs(t *testing.T) {
-	baseCoreYaml, err := NewCoreYaml("core.yaml")
-	if err != nil {
-		t.Errorf("Failed to create CoreYaml: %v", err)
-	}
+//----------------------------------------------------------------------------------
+// TestMerge()
+//----------------------------------------------------------------------------------
+// Reads in two different instances of core.yaml, changes some of the values of
+// the second one read in, then merges the two, expected the changed values to be
+// present in the merged config struct.
+//----------------------------------------------------------------------------------
+func TestMerge(t *testing.T) {
+	baseCoreYaml := NewCoreYaml("core.yaml")
 
 	// read in another instance of a core config
 	// simulates reading in a user's core config
-	userCoreYaml, err := NewCoreYaml("core.yaml")
-	if err != nil {
-		t.Errorf("Failed to create CoreYaml: %v", err)
-	}
+	userCoreYaml := NewCoreYaml("core.yaml")
 
 	// change some values
 	userCoreYaml.Peer.ID = "test_id"

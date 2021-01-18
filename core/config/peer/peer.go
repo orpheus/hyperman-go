@@ -1,11 +1,7 @@
 package config
 
 import (
-	"fmt"
 	"github.com/orpheus/hyperspace/core/util"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"log"
 	"os"
 	"time"
 )
@@ -15,20 +11,13 @@ import (
 //----------------------------------------------------------------------------------
 // Creates an instance of a CoreYaml struct and then loads it with a core.yaml.
 //----------------------------------------------------------------------------------
-func NewCoreYaml(filePath string) (*CoreYaml, error) {
+func NewCoreYaml(filePath string) *CoreYaml {
 	config := &CoreYaml{}
 
-	yamlBytes, err := util.ReadInYamlData(filePath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create and load a CoreYaml from: %v", err)
-	}
+	// will call os.exit(1) if error so no need to check for error
+	util.UnmarshalYaml(filePath, &config, "Unmarshal New CoreYaml")
 
-	err = yaml.Unmarshal(yamlBytes, &config)
-	if err != nil {
-		return nil, fmt.Errorf("error unmarshalling CoreYaml: %v", err)
-	}
-
-	return config, nil
+	return config
 }
 
 //----------------------------------------------------------------------------------
@@ -37,18 +26,8 @@ func NewCoreYaml(filePath string) (*CoreYaml, error) {
 // Writes the config struct to a yaml file given a `filePath` and `perm`
 // The yaml file takes on the name of the end of the path given.
 //----------------------------------------------------------------------------------
-func (c *CoreYaml) Write(filePath string, perm os.FileMode) error {
-	d, err := yaml.Marshal(c)
-	if err != nil {
-		log.Fatalf("error marshing CoreYaml to bytes: %v", err)
-	}
-
-	err = ioutil.WriteFile(filePath, d, perm)
-	if err != nil {
-		log.Fatalf("error writing CoreYaml to OS: %v", err)
-
-	}
-	return nil
+func (c *CoreYaml) Write(filePath string, perm os.FileMode) {
+	util.MarshalAndWriteYaml(c, filePath, perm, "Write CoreYaml")
 }
 
 //----------------------------------------------------------------------------------

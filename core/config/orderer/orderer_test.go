@@ -7,11 +7,15 @@ import (
 	"testing"
 )
 
-func TestLoadOrdererYaml(t *testing.T) {
-	o, err := NewOrdererYaml("orderer.yaml")
-	if err != nil {
-		t.Errorf("Failed to create OrdererYaml: %v", err)
-	}
+//----------------------------------------------------------------------------------
+// TestLoadNew()
+//----------------------------------------------------------------------------------
+// Loads an orderer.yaml file into an OrdererYaml config struct and then checks
+// each value of the struct to make sure the fields got set correctly according
+// to the orderer.yaml file read in.
+//----------------------------------------------------------------------------------
+func TestLoadNew(t *testing.T) {
+	o := NewOrdererYaml("orderer.yaml")
 
 	require.Equal(t, o.General.ListenAddress, "127.0.0.1")
 	require.Equal(t, o.General.ListenPort, uint16(7050))
@@ -104,35 +108,38 @@ func TestLoadOrdererYaml(t *testing.T) {
 	require.Equal(t, o.Consensus.SnapDir, "/var/hyperledger/production/orderer/etcdraft/snapshot")
 }
 
-func TestWriteOrdererYaml(t *testing.T) {
-	OrdererYaml, err := NewOrdererYaml("orderer.yaml")
-	if err != nil {
-		t.Errorf("Failed to create OrdererYaml: %v", err)
-	}
-	OrdererYaml.Write("test_Orderer.yaml", 0755)
+//----------------------------------------------------------------------------------
+// TestWrite()
+//----------------------------------------------------------------------------------
+// Reads in an orderer.yaml, writes it the file system under another name, creating
+// a new orderer.yaml, then reads the generated yaml in and expects no errors.
+//----------------------------------------------------------------------------------
+func TestWrite(t *testing.T) {
+	generated := "test_orderer.yaml"
 
-	OrdererYaml, err = NewOrdererYaml("test_orderer.yaml")
-	if err != nil {
-		t.Errorf("Failed to load generated OrdererYaml: %v", err)
-	}
+	OrdererYaml := NewOrdererYaml("orderer.yaml")
+	OrdererYaml.Write(generated, 0755)
+
+	OrdererYaml = NewOrdererYaml(generated)
 
 	t.Cleanup(func() {
-		os.Remove("test_orderer.yaml")
+		_ = os.Remove(generated)
 	})
 }
 
-func TestMergeOrdererYamlStructs(t *testing.T) {
-	baseOrdererYaml, err := NewOrdererYaml("orderer.yaml")
-	if err != nil {
-		t.Errorf("Failed to create OrdererYaml: %v", err)
-	}
+//----------------------------------------------------------------------------------
+// TestMerge()
+//----------------------------------------------------------------------------------
+// Reads in two different instances of orderer.yaml, changes some of the values of
+// the second one read in, then merges the two, expected the changed values to be
+// present in the merged config struct.
+//----------------------------------------------------------------------------------
+func TestMerge(t *testing.T) {
+	baseOrdererYaml := NewOrdererYaml("orderer.yaml")
 
 	// read in another instance of a Orderer config
 	// simulates reading in a user's Orderer config
-	userOrdererYaml, err := NewOrdererYaml("orderer.yaml")
-	if err != nil {
-		t.Errorf("Failed to create OrdererYaml: %v", err)
-	}
+	userOrdererYaml := NewOrdererYaml("orderer.yaml")
 
 	// change some values
 	userOrdererYaml.General.ListenAddress = "999.9.9.9"
