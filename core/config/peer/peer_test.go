@@ -226,3 +226,29 @@ func TestWriteCoreYaml (t *testing.T) {
 		os.Remove("test_core.yaml")
 	})
 }
+
+func TestMergeCoreYamlStructs (t *testing.T) {
+	baseCoreYaml, err := NewCoreYaml("core.yaml")
+	if err != nil {
+		t.Errorf("Failed to create CoreYaml: %v", err)
+	}
+
+	// read in another instance of a core config
+	// simulates reading in a user's core config
+	userCoreYaml, err := NewCoreYaml("core.yaml")
+	if err != nil {
+		t.Errorf("Failed to create CoreYaml: %v", err)
+	}
+
+	// change some values
+	userCoreYaml.Peer.ID = "test_id"
+	userCoreYaml.Peer.NetworkId = ""
+	userCoreYaml.Metrics.Statsd.Network = "tcp"
+
+	baseCoreYaml.Merge(userCoreYaml)
+
+	// expect the changes values to exist on the original struct
+	require.Equal(t, baseCoreYaml.Peer.ID, "test_id")
+	require.Equal(t, baseCoreYaml.Peer.NetworkId, "")
+	require.Equal(t, baseCoreYaml.Metrics.Statsd.Network, "tcp")
+}

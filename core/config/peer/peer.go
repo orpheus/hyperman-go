@@ -11,7 +11,7 @@ import (
 )
 
 //----------------------------------------------------------------------------------
-// NewLoad()
+// NewCoreYaml()
 //----------------------------------------------------------------------------------
 // Creates an instance of a CoreYaml struct and then loads it with a core.yaml.
 //----------------------------------------------------------------------------------
@@ -31,6 +31,12 @@ func NewCoreYaml (filePath string) (*CoreYaml, error) {
 	return config, nil
 }
 
+//----------------------------------------------------------------------------------
+// Write()
+//----------------------------------------------------------------------------------
+// Writes the config struct to a yaml file given a `filePath` and `perm`
+// The yaml file takes on the name of the end of the path given.
+//----------------------------------------------------------------------------------
 func (c *CoreYaml) Write (filePath string, perm os.FileMode) error {
 	d, err := yaml.Marshal(c)
 	if err != nil {
@@ -43,6 +49,16 @@ func (c *CoreYaml) Write (filePath string, perm os.FileMode) error {
 
 	}
 	return nil
+}
+
+//----------------------------------------------------------------------------------
+// Merge()
+//----------------------------------------------------------------------------------
+// Merges the called config struct with another CoreYaml config struct.
+// The called struct gets overridden by the values of the struct passed as the arg.
+//----------------------------------------------------------------------------------
+func (c *CoreYaml) Merge (config *CoreYaml) {
+	util.MergeStructs(c, config, "Merge CoreYaml configs")
 }
 
 //----------------------------------------------------------------------------------
