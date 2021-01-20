@@ -1,4 +1,4 @@
-package config
+package peer
 
 import (
 	"github.com/orpheus/hyperspace/util"

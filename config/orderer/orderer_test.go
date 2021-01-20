@@ -1,4 +1,4 @@
-package config
+package orderer
 
 import (
 	"github.com/orpheus/hyperspace/util"

@@ -1,4 +1,4 @@
-package config
+package hypernet_test
 
 import "testing"
 

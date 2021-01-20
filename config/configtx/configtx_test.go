@@ -1,4 +1,4 @@
-package config
+package configtx
 
 import (
 	"github.com/orpheus/hyperspace/util"

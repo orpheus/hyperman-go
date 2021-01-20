@@ -1,53 +1,54 @@
-package config
+package hypernet
 
 import (
-	"fmt"
-	config "github.com/orpheus/hyperspace/config/peer"
-	"github.com/orpheus/hyperspace/util"
-	"gopkg.in/yaml.v2"
+	"github.com/orpheus/hyperspace/config/configtx"
+	"github.com/orpheus/hyperspace/config/orderer"
+	"github.com/orpheus/hyperspace/config/peer"
 )
 
-type uniqueName string
-
+// todo: generate any values that can be that aren't explicitly set
+// todo: generate data that needs to be generated...
+// todo: scriptPaths: default to command-script name
 type Hypernet struct {
-	Peers map[uniqueName]struct {
-		binaryName string          `yaml:"binaryName"`
-		config     config.CoreYaml `yaml:"config"`
-	} `yaml:"peers"`
-	Orderers map[uniqueName]struct {
-	} `yaml:"orderers"`
-	// todo: generate any values that can be that aren't explicitly set
-	Configtxgen struct {
-		// binary name, defaults to `configtxgen`
-		// todo: default to command-script name
-		FabricBinary string
-		// path to command-script to create genesis/consortiums
-		// todo: default to command-script name
-		ScriptPath string
-		// The following are the allowed flags passed to the binary
-		ConfigPath string
-		Profile    string
-		ChannelID  string
-		Output     string
-		//Config     FabricConfigtxConfig
-	}
-	// todo: fill out
-	Cryptogen struct {
-	}
+	Name        string      `yaml:"Name"`
+	Netroot     string      `yaml:"Netroot"`
+	Peers       []*Peer     `yaml:"peers"`
+	Orderers    []*Orderer  `yaml:"orderers"`
+	Configtxgen Configtxgen `yaml:"Configtxgen"`
+	Cryptogen   Cryptogen   `yaml:"Cryptogen"`
 }
 
-func NewHypernet(filePath string) (*Hypernet, error) {
-	config := &Hypernet{}
+type Peer struct {
+	BinaryName  string        `yaml:"BinaryName"`
+	Config      peer.CoreYaml `yaml:"Config"`
+	Environment []string      `yaml:"Environment"`
+}
 
-	yamlBytes, err := util.ReadInYamlData(filePath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create and load a HypernetYaml from: %v", err)
-	}
+type Orderer struct {
+	BinaryName  string              `yaml:"BinaryName"`
+	Config      orderer.OrdererYaml `yaml:"Config"`
+	Environment []string            `yaml:"Environment"`
+}
 
-	err = yaml.Unmarshal(yamlBytes, &config)
-	if err != nil {
-		return nil, fmt.Errorf("error unmarshaling HypernetYaml: %v", err)
-	}
+type Configtxgen struct {
+	BinaryName string                `yaml:"BinaryName"`
+	Config     configtx.ConfigtxYaml `yaml:"Config"`
+	ScriptPath string                `yaml:"ScriptPath"` // path or name of shell script to create configtxgen
+	// the following are passed to the binary as flag arguments
+	ConfigPath string `yaml:"ConfigPath"`
+	Profile    string `yaml:"Profile"`
+	ChannelID  string `yaml:"ChannelID"`
+	Output     string `yaml:"Output"`
+}
 
-	return config, nil
+type Cryptogen struct {
+	BinaryName string            `yaml:"BinaryName"`
+	ScriptPath string            `yaml:"ScriptPath"`
+	Configs    []*NamePathOutput `yaml:"Configs"`
+}
+
+type NamePathOutput struct {
+	Name   string `yaml:"Name"`
+	Path   string `yaml:"Path"`
+	Output string `yaml:"Output"`
 }

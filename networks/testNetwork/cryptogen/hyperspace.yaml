@@ -9,7 +9,7 @@ fabricBinary: "cryptogen"
 # that way I can just list the file-name here...
 scriptPath: "../../../cmdscripts/make-cryptogen.sh"
 
-# Config and Output paths to organization crypto config and materal
+# Config and Output paths to organization crypto config and material
 configs:
   org-orderer:
     path: "../organizations/cryptogen/crypto-config-orderer.yaml"

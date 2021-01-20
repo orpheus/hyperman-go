@@ -1,38 +1,236 @@
-# toDo: strip defaults
+# Copyright CASS Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+___
+################################################################################
+#
+#   SECTION: Hypernet Configuration
+#
+#   - This configuration file is used to configure an entire fabric network.
+#     It is meant to act as a single-sheet key for a network, to be easily
+#     shared and configured. Here you can define orderers, peers, configtx
+#     and cryptogen settings. Hyperspace will read this config and create
+#     a fabric network for you.
+#
+################################################################################
 
-orderers:
-  # unique name
-  orderer-01:
-    # node-type: orderer|peer
-    type: orderer
-    # fabric overrides. everything below here will get applied to the
-    # fabric binary on network  startup. see the orderer.yaml to see
-    # what config is possible. the format here is the exact same as the
-    # orderer.yaml (it's meant to  literally override that yaml)
-    config:
-      operations:
-        listenAddress: 127.0.0.1:6050
+# The name to give the directory that houses the fabric network. Created under
+# the Netroot path
+Name: testnet
 
-peers:
-  # unique name
-  peer-01:
-    # fabric core.yaml config
-    config:
+# The directory in which to create the network with the name given above.
+# NETROOT is a known key that will place the network within the hyperspace project.
+# NETROOT="${HYPERSPACE_PATH}/networks"... if HYPERSPACE_PATH isn't defined, throw.
+# !!! All file paths defined in this yaml will be relative to `"${NETROOT}/${NAME}"`
+Netroot: NETROOT
 
-# Configuration for the configtxgen fabric binary.
-# Creates system-channel and genesis block.
-configtxgen:
-  fabricBinary: configtxgen # toDo: make default
-  scriptPath: create-consortium # toDo: make default and change to ScriptName
-  configPath: "." # toDo: make default
+################################################################################
+#
+#   SECTION: Hyperspace Orderer
+#
+#   - This section defines the values to encode into a config to be used for
+#     giving instructions to a shell script for starting an orderer node. Use
+#     the `Config` field to configure the node.
+#
+################################################################################
+Orderers:
+
+  # Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
+  # Change only if you generated a custom binary name during build output
+  - BinaryName: orderer
+
+    # Fabric orderer.yaml config. Overrides template orderer.yaml
+    Config:
+
+    # Environment variables to be passed to the peer node. It is recommended
+    # to configure all settings through the `Config` field which is a
+    # core.yaml override, but this is made available anyways. []string
+    Environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=../../../configtxgen/system-genesis-block/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=../../../cryptogen/organizations/testOrgs/ordererOrganizations/example.com/orderers/orderer.example.com/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=../../../cryptogen/organizations/testOrgs/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=../../../cryptogen/organizations/testOrgs/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[../../../cryptogen/organizations/testOrgs/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt]
+      - ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=../../../cryptogen/organizations/testOrgs/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=../../../cryptogen/organizations/testOrgs/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[../../../cryptogen/organizations/testOrgs/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt]
+      # added by me
+      - ORDERER_OPERATIONS_LISTENADDRESS=127.0.0.1:6050
+
+
+################################################################################
+#
+#   SECTION: Hyperspace Peer
+#
+#   - This section defines the values to encode into a config to be used for
+#     giving instructions to a shell script for starting a fabric peer. Use
+#     the `Config` field to configure the node.
+#
+################################################################################
+Peers:
+
+  # Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
+  # Change only if you generated a custom binary name during build output
+  - BinaryName: peer-01
+
+    # Fabric core.yaml config. Overrides template core.yaml
+    Config:
+
+    # Environment variables to be passed to the peer node. It is recommended
+    # to configure all settings through the `Config` field which is a
+    # core.yaml override, but this is made available anyways. []string
+    Environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer0.org1.example.com
+      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org1.example.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      # Added by me: so doesn't clash with 9443 whatever's running there
+      - CORE_OPERATIONS_LISTENADDRESS=127.0.0.1:9444
+      # Added by me: Send ledger snapshots to tmp disk
+      - CORE_LEDGER_SNAPSHOTS_ROOTDIR=/tmp/hyperledger/peer-01/ledger/snapshots
+      - CORE_PEER_ID=PEER_01
+      - CORE_PEER_OPERATIONS_LISTENADDRESS=127.0.0.1:6051
+      - CORE_PEER_MSPCONFIGPATH=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
+      - CORE_PEER_FILESYSTEMPATH=ledger
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6061
+
+  - BinaryName: peer-02
+
+    # Fabric core.yaml config. Overrides template core.yaml
+    Config:
+
+    # Environment variables to be passed to the peer node. It is recommended
+    # to configure all settings through the `Config` field which is a
+    # core.yaml override, but this is made available anyways. []string
+    Environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer0.org2.example.com
+      - CORE_PEER_ADDRESS=peer0.org2.example.com:9051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org2.example.com:9052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:9051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:9051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      # Added by me: so doesn't clash with 9443 whatever's running there
+      - CORE_OPERATIONS_LISTENADDRESS=127.0.0.1:9445
+      # Added by me: Send ledger snapshots to tmp disk
+      - CORE_LEDGER_SNAPSHOTS_ROOTDIR=/tmp/hyperledger/peer-02/ledger/snapshots
+      - CORE_PEER_ID=PEER_02
+      - CORE_PEER_OPERATIONS_LISTENADDRESS=127.0.0.1:6052
+      - CORE_PEER_MSPCONFIGPATH=../../../cryptogen/organizations/testOrgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
+      - CORE_PEER_FILESYSTEMPATH=ledger
+      - CORE_PEER_PROFILE_LISTENADDRESS=0.0.0.0:6062
+
+################################################################################
+#
+#   SECTION: Hyperspace Configtxgen
+#
+#   - This section defines the values to encode into a config to be used for
+#     giving instructions to a shell script for creating the genesis block,
+#     system-channel and other configtx related duties. Can use the `Config`
+#     field to override the default/template configtx.yaml
+#
+################################################################################
+Configtxgen:
+
+  # Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
+  # Change only if you generated a custom binary name during build output
+  # toDo: make default
+  BinaryName: configtxgen
+
+  # Path to Hyperspace cmdscript. Should this path be
+  # relative to the cmdscripts directory?
+  # that way I can just list the file-name here...
+  # toDo: make default and change to ScriptName
+  ScriptPath: "../../../cmdscripts/create-consortium.sh"
+
+  # Path to fabric configtx yaml configuration.
+  # configtxgen will look for "configtx.yaml"
+  # in the path provided, just give the path
+  # to the directory that houses the config
+  # toDo: make default
+  ConfigPath: "."
+
   # Must match a profile listed in the configtx.yaml
-  profile: "TwoOrgsOrdererGenesis"
-  channelID: "system-channel"
-  output: "system-genesis-block/genesis.block" # todo: make default
-  # fabric configtx.yaml config
-  config:
-    organizations:
-      - &OrdererOrg
-        name: Ryan
+  Profile: "TwoOrgsOrdererGenesis"
 
-    
+  # IDK yet.. just an ID?
+  ChannelID: "system-channel"
+
+  # Path for genesis block output
+  # todo: make default
+  Output: "system-genesis-block/genesis.block"
+
+  # Fabric configtx.yaml config. Overrides template orderer.yaml
+  Config:
+
+################################################################################
+#
+#   SECTION: Hyperspace Cryptogen
+#
+#   - This section defines the values to encode into a config to be used for
+#     giving instructions to a shell script for generating the cryptogen
+#     material. Useful for testnets.
+#
+################################################################################
+Cryptogen:
+
+  # Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
+  # Change only if you generated a custom binary name during build output
+  # toDo: make default
+  BinaryName: cryptogen
+
+  # Path to Hyperspace cmdscript. Should this path be
+  # relative to the cmdscripts directory?
+  # that way I can just list the file-name here...
+  # toDo: make default and change to ScriptName
+  ScriptPath: "../../../cmdscripts/make-cryptogen.sh"
+
+  # Config and Output paths to organization crypto config and material
+  Configs:
+
+    - Name: Org-orderer
+      Path: "../organizations/cryptogen/crypto-config-orderer.yaml"
+      Output: "organizations/testOrgs"
+
+    - Name: Org-1
+      Path: "../organizations/cryptogen/crypto-config-org1.yaml"
+      Output: "organizations/testOrgs"
+
+    - Name: Org-2
+      Path: "../organizations/cryptogen/crypto-config-org2.yaml"
+      Output: "organizations/testOrgs"
+
+    - Name: Org-3
+      Path: "../organizations/cryptogen/crypto-config-org2.yaml"
+      Output: "organizations/testOrgs"

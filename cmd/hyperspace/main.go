@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/orpheus/hyperspace/core/cryptogen"
 	"github.com/orpheus/hyperspace/core/network"
 	"github.com/spf13/cobra"
 	"os"
@@ -13,6 +14,7 @@ var mainCmd = &cobra.Command{Use: "hyperspace"}
 
 func main () {
 	mainCmd.AddCommand(network.Cmd())
+	mainCmd.AddCommand(cryptogen.Cmd())
 	// On failure Cobra prints the usage message and error string, so we only
 	// need to exit with a non-0 status
 	if mainCmd.Execute() != nil {

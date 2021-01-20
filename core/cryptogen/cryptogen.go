@@ -3,16 +3,102 @@ package cryptogen
 import (
 	"fmt"
 	"github.com/orpheus/hyperspace/util"
+	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 )
 
-/**
-HyperCryptogen
-hyperspace + fabric cryptogen
-*/
+const (
+	cmdName = "cryptogen"
+	cmdDesc = "Generate cryptogen"
+)
+
+var cmd = &cobra.Command{
+	Use:   cmdName,
+	Short: fmt.Sprint(cmdDesc),
+	Long:  fmt.Sprint(cmdDesc),
+}
+
+// Cmd returns the cobra command for Cryptogen
+func Cmd() *cobra.Command {
+	//cmd.AddCommand(generateCmd())
+	return cmd
+}
+
+//func generateCmd() *cobra.Command {
+//	return &cobra.Command{
+//		Use:   "generate",
+//		Short: "Generates cryptogen.",
+//		Long:  `Generates cryptogen material for organizations.`,
+//		RunE: func(cmd *cobra.Command, args []string) error {
+//			if len(args) > 1 {
+//				return fmt.Errorf("trailing args detected")
+//			}
+//			var network string
+//			if len(args) == 1 {
+//				network = args[0]
+//
+//				netpath := filepath.Join("networks", network)
+//				exists, err := util.FileOrDirectoryExists(netpath)
+//				if err != nil {
+//					log.Panic(err)
+//				}
+//				if !exists {
+//					log.Fatalf("Network: %v, not found. Path at %s does not exist", network, netpath)
+//				}
+//			}
+//			if network == "" {
+//				fmt.Println("Network not specified. Using default network specified in root hyperspace.yaml")
+//			}
+//			Generate(network)
+//			return nil
+//		},
+//	}
+//}
+//
+//func Generate (network string, config *hypernet.Cryptogen) error {
+//	// given a network,
+//	// use the NETROOT/network path as the base path
+//	// read in hypernet.yaml
+//	// check for HYPERSPACE_PATH
+//
+//	for _, c := range config.Configs {
+//		configPath := fmt.Sprintf("configs.%s.path", c.Name)
+//		outputPath := fmt.Sprintf("configs.%s.output", c.Name)
+//
+//		// create paths relative to NETROOT/network
+//		configPath = filepath.Join(c.hv.Path, c.hv.Viper.GetString(configPath))
+//		outputPath = filepath.Join(c.hv.Path, c.hv.Viper.GetString(outputPath))
+//
+//		cmd := exec.Command("/bin/bash",
+//			config.ScriptPath,
+//			"-n", network,
+//			"-b", config.BinaryName,
+//			"-c", configPath,
+//			"-o", outputPath,
+//			"-i", c.Name,
+//		)
+//
+//		cmd.Stdout = os.Stdout
+//		cmd.Stderr = os.Stderr
+//
+//		err := cmd.Run()
+//		if err != nil {
+//			log.Panicf("Error making cryptogen.\n failed on %s", c.Name)
+//		}
+//		log.Printf("Cryptogen: `generate` finished with error: %v", err)
+//	}
+//
+//	return nil
+//}
+
+// -----------------------------------------------
+// HyperCryptogen
+// -----------------------------------------------
+// hyperspace + fabric cryptogen
+// -----------------------------------------------
 type Cryptogen struct {
 	// network name
 	network string
@@ -65,7 +151,7 @@ func (c *Cryptogen) Make() {
 		if err != nil {
 			log.Panicf("Error making cryptogen.\n failed on %s", org)
 		}
-		log.Printf("Cryptogen main script finished with error: %v", err)
+		log.Printf("Cryptogen: `generate` finished with error: %v", err)
 	}
 }
 

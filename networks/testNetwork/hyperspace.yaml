@@ -12,12 +12,6 @@ scriptPath: "../../cmdscripts/spawn-node.sh"
 # the values underneath the keys are the names of
 # the nodes which should match the directory names
 # found under nodes/peers and nodes/orderers
-# (fyi: "peer" and "orderer" are singular here
-# because that's the binary name. They are plural
-# in the directory tree (node/[peers/orderers]) because
-# there are multiple instances of that single binary...
-# and because I just happened to name it that way.
-# maybe just standardize to singular... nah
 nodes:
   peers:
     - peer-01
