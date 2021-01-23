@@ -1,15 +1,16 @@
 package configtx
 
 import (
-	"github.com/orpheus/hyperspace/util"
 	"os"
 	"time"
+
+	"github.com/orpheus/hyperspace/util"
 )
 
 //----------------------------------------------------------------------------------
-// NewCoreYaml()
+// NewConfigtxYaml()
 //----------------------------------------------------------------------------------
-// Creates an instance of a CoreYaml struct and then loads it with a core.yaml.
+// Creates an instance of a NewConfigtxYaml struct and then loads it with a core.yaml.
 //----------------------------------------------------------------------------------
 func NewConfigtxYaml(filePath string) *ConfigtxYaml {
 	config := &ConfigtxYaml{}

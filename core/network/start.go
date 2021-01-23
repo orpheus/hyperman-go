@@ -3,17 +3,18 @@ package network
 import (
 	"context"
 	"fmt"
-	"github.com/orpheus/hyperspace/core/configtxgen"
-	"github.com/orpheus/hyperspace/core/cryptogen"
-	"github.com/orpheus/hyperspace/util"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"log"
 	"os"
 	"os/exec"
 	"os/signal"
 	"path/filepath"
 	"time"
+
+	"github.com/orpheus/hyperspace/core/configtxgen"
+	"github.com/orpheus/hyperspace/core/cryptogen"
+	"github.com/orpheus/hyperspace/util"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func startCmd() *cobra.Command {
@@ -51,7 +52,6 @@ func start(network string) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
 
-
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -77,7 +77,6 @@ func start(network string) {
 	// Read from the hyperspace config for configtxgen
 	// create the genesis block and consortiums.
 	configtxgen.Initialize(rv).Create()
-
 
 	// check to make sure nods config is set
 	if !rv.NetworkViper.IsSet("scriptPath") {
@@ -141,7 +140,7 @@ path with the absolute path of the CONTROL_CENTER (the hyperspace directory root
 Note: need to name the HYPERSPACE_CONTROLLER, not GOD. Who or what controls the Hyperspace?
 ...think more on this later
 */
-func spawnOrderers (rv *util.RootViper, scriptPath string, ctx context.Context) {
+func spawnOrderers(rv *util.RootViper, scriptPath string, ctx context.Context) {
 	// create a key:map for orderers
 	ordererVipers := make(map[string]*viper.Viper)
 
@@ -179,10 +178,10 @@ func spawnOrderers (rv *util.RootViper, scriptPath string, ctx context.Context) 
 
 		// just want to make sure I'm closing over these variables just in case
 		// because I don't know golang that well yet
-		go func (orderName, scriptPath string, args []string, ctx context.Context) {
+		go func(orderName, scriptPath string, args []string, ctx context.Context) {
 			cmd := exec.Command(
 				scriptPath,
-				args...
+				args...,
 			)
 			// NEEDED TO SEE LOGS IN TERMINAL
 			// in the bash script make sure to route
@@ -225,7 +224,7 @@ path with the absolute path of the CONTROL_CENTER (the hyperspace directory root
 Note: need to name the HYPERSPACE_CONTROLLER, not GOD. Who or what controls the Hyperspace?
 ...think more on this later
 */
-func spawnPeers (rv *util.RootViper, scriptPath string, ctx context.Context) {
+func spawnPeers(rv *util.RootViper, scriptPath string, ctx context.Context) {
 	// create a key:map for peers
 	peerVipers := make(map[string]*viper.Viper)
 	// get the peers
@@ -262,10 +261,10 @@ func spawnPeers (rv *util.RootViper, scriptPath string, ctx context.Context) {
 			args = append(args, env)
 		}
 
-		go func (peerName, scriptPath string, args []string, ctx context.Context) {
+		go func(peerName, scriptPath string, args []string, ctx context.Context) {
 			cmd := exec.Command(
 				scriptPath,
-				args...
+				args...,
 			)
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
