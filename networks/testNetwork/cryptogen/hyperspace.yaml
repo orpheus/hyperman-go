@@ -1,27 +1,33 @@
 # Hyperspace Cryptogen Configuration
 
 # Cryptogen fabric binary name. NOT A HYPERSPACE BINARY.
-# Change only if you generated a custom binary name during build ouptut
-fabricBinary: "cryptogen"
+# Change only if you generated a custom binary name during build output
+# toDo: make default
+BinaryName: cryptogen
 
 # Path to Hyperspace cmdscript. Should this path be
 # relative to the cmdscripts directory?
 # that way I can just list the file-name here...
-scriptPath: "../../../cmdscripts/make-cryptogen.sh"
+# toDo: make default and change to ScriptName
+ScriptPath: "../../../cmdscripts/make-cryptogen.sh"
 
 # Config and Output paths to organization crypto config and material
-configs:
-  org-orderer:
-    path: "../organizations/cryptogen/crypto-config-orderer.yaml"
-    output: "organizations/testOrgs"
-  org-1:
-    path: "../organizations/cryptogen/crypto-config-org1.yaml"
-    output: "organizations/testOrgs"
-  org-2:
-    path: "../organizations/cryptogen/crypto-config-org2.yaml"
-    output: "organizations/testOrgs"
-  org-3:
-    path: "../organizations/cryptogen/crypto-config-org2.yaml"
-    output: "organizations/testOrgs"
+Configs:
+
+  - Name: Org-orderer
+    Path: "../organizations/cryptogen/crypto-config-orderer.yaml"
+    Output: "organizations/testOrgs"
+
+  - Name: Org-1
+    Path: "../organizations/cryptogen/crypto-config-org1.yaml"
+    Output: "organizations/testOrgs"
+
+  - Name: Org-2
+    Path: "../organizations/cryptogen/crypto-config-org2.yaml"
+    Output: "organizations/testOrgs"
+
+  - Name: Org-3
+    Path: "../organizations/cryptogen/crypto-config-org2.yaml"
+    Output: "organizations/testOrgs"
 
 
